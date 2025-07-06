@@ -680,6 +680,56 @@ body {
 .header-logo:hover {
     transform: scale(1.1);
 }
+/* Ajout au daily-recap.css */
+.skeleton-item {
+    animation: skeleton-loading 1.5s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.skeleton-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+}
+
+.skeleton-text {
+    flex: 1;
+    padding-left: 12px;
+}
+
+.skeleton-line {
+    height: 12px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.skeleton-name { width: 70%; }
+.skeleton-score { width: 50%; }
+.skeleton-activity { width: 90%; }
+.skeleton-time { width: 30%; }
+
+.skeleton-avatars {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes skeleton-loading {
+    0% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
 
 @media (max-width: 768px) {
     .header-logo {
