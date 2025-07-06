@@ -6,11 +6,10 @@ let gigachadsData = null;
 let rankingData = [];
 const processedActivities = new Set();
 
-// ========== Cache System (identique à activity-widget.js) ==========
 class ActivitiesCache {
     constructor() {
         this.cache = new Map();
-        this.cacheDuration = 5 * 60 * 1000; // 5 minutes
+        this.cacheDuration = 5 * 60 * 1000; 
     }
     
     getCacheKey(userkey) {
@@ -45,7 +44,7 @@ function debug(message, data = null) {
     }
 }
 
-// ========== Header avec image locale ==========
+
 function renderHeader() {
     const titleElement = document.querySelector('.title-container h1');
     if (titleElement) {
@@ -71,7 +70,7 @@ function updateCurrentDate() {
     }
 }
 
-// ========== Avatar Functions ==========
+
 function getAvatarUrl(profileId, username) {
     if (!profileId || !gigachadsData) {
         return `https://via.placeholder.com/40/cccccc/666666?text=${username.charAt(0).toUpperCase()}`;
@@ -150,7 +149,6 @@ function createUniqueId(activity) {
     return `${type}-${authorId}-${subjectId}-${timestamp}`;
 }
 
-// ========== API Functions ==========
 async function fetchUserActivities(userkey) {
     debug(`Fetching activities for ${userkey}`);
     
@@ -207,7 +205,6 @@ async function loadGigachadsData() {
     }
 }
 
-// ========== Invitations Functions ==========
 async function loadGigachadsForInvitations() {
     try {
         debug('Loading Gigachads data for invitations...');
@@ -228,14 +225,14 @@ async function loadInvitationsData() {
         
         let allProfilesWithInvites = [];
         let offset = 0;
-        const limit = 100; // Même limite qu'Ethoscope
+        const limit = 100; 
         let hasMore = true;
         let totalFetched = 0;
         
-        while (hasMore && totalFetched < 1000) { // Limite de sécurité
+        while (hasMore && totalFetched < 1000) { 
             debug(`Fetching profiles batch - offset: ${offset}, limit: ${limit}`);
             
-            // MÊME URL QU'ETHOSCOPE avec sortField=invitesAvailable
+            
             const apiUrl = `https://api.ethos.network/api/v1/profiles/directory?limit=${limit}&offset=${offset}&sortField=invitesAvailable`;
             
             const response = await fetch(apiUrl, {
@@ -252,7 +249,7 @@ async function loadInvitationsData() {
             const data = await response.json();
             
             if (data.ok && data.data.values) {
-                // Filtrer pour ne garder que ceux avec invitations ≥ 1
+                
                 const profilesWithInvites = data.data.values.filter(profile => 
                     profile.invitesAvailable && profile.invitesAvailable >= 1
                 );
@@ -262,12 +259,10 @@ async function loadInvitationsData() {
                 
                 debug(`✅ Batch fetched: ${data.data.values.length} profiles, ${profilesWithInvites.length} with invites`);
                 
-                // Si on a récupéré moins que la limite, on a atteint la fin
-                // OU si les derniers n'ont pas d'invitations (car c'est trié), on peut arrêter
                 hasMore = data.data.values.length === limit && profilesWithInvites.length > 0;
                 offset += limit;
                 
-                // Délai entre les requêtes
+               
                 if (hasMore) {
                     await new Promise(resolve => setTimeout(resolve, 200));
                 }
@@ -282,7 +277,7 @@ async function loadInvitationsData() {
             totalInvites: allProfilesWithInvites.reduce((sum, p) => sum + (p.invitesAvailable || 0), 0)
         });
         
-        // Debug pour toi spécifiquement
+        
         const guezito = allProfilesWithInvites.find(p => p.actor?.profileId === 14905);
         debug('🔍 Guezito profile found:', guezito ? {
             name: guezito.actor?.displayName || guezito.actor?.username,
@@ -298,7 +293,7 @@ async function loadInvitationsData() {
     }
 }
 
-// ========== Fetch Recent Activities ==========
+
 async function fetchRecentActivities() {
     debug('Starting activities fetch...');
     if (!gigachadsData || !gigachadsData.ranking) {
@@ -388,7 +383,6 @@ async function fetchRecentActivities() {
     };
 }
 
-// ========== Display Functions ==========
 function renderVouchesSection(vouches) {
     const container = document.getElementById('vouches-list');
     
@@ -411,20 +405,20 @@ function renderVouchesSection(vouches) {
         
         const stakeAmount = getStakedAmount(vouch);
         
-        // 🔗 RÉCUPÉRER L'ID CORRECT depuis data.id
+        
         const vouchId = vouch.data?.id;
         
-        // Si pas d'ID, fallback vers le profil de la personne
+        
         let clickUrl;
         if (vouchId) {
             clickUrl = `https://app.ethos.network/activity/vouch/${vouchId}`;
         } else {
-            // Fallback: lien vers le profil de la personne qui a reçu le vouch
+            
             const subjectUsername = vouch.subject?.username;
             clickUrl = `https://app.ethos.network/profile/x/${subjectUsername}`;
         }
         
-        console.log(`🔍 DEBUG - Vouch URL: ${clickUrl}`); // Pour debug
+        console.log(`🔍 DEBUG - Vouch URL: ${clickUrl}`); 
         
         return `
             <div class="activity-item clickable" data-type="vouch" onclick="window.open('${clickUrl}', '_blank')">
@@ -481,20 +475,20 @@ function renderReviewsSection(reviews) {
                           score === 'negative' ? 'negative' : 'neutral';
         const scoreText = score.charAt(0).toUpperCase() + score.slice(1);
         
-        // 🔗 RÉCUPÉRER L'ID CORRECT depuis data.id
+        
         const reviewId = review.data?.id;
         
-        // Si pas d'ID, fallback vers le profil de la personne
+        
         let clickUrl;
         if (reviewId) {
             clickUrl = `https://app.ethos.network/activity/review/${reviewId}`;
         } else {
-            // Fallback: lien vers le profil de la personne qui a reçu la review
+            
             const subjectUsername = review.subject?.username;
             clickUrl = `https://app.ethos.network/profile/x/${subjectUsername}`;
         }
         
-        console.log(`🔍 DEBUG - Review URL: ${clickUrl}`); // Pour debug
+        console.log(`🔍 DEBUG - Review URL: ${clickUrl}`); 
         
         return `
             <div class="activity-item clickable" data-type="review" onclick="window.open('${clickUrl}', '_blank')">
@@ -551,7 +545,7 @@ function renderLeaderboardSection() {
         const rankBadge = getRankBadge(user.rank);
         const avatar = user.user.avatarUrl || 'https://via.placeholder.com/35';
         const displayName = user.user.displayName || user.user.username;
-         // 🔗 LIEN VERS PROFIL ETHOS
+         
         const profileUrl = `https://ethos.network/profile/${user.user.profileId}`;
         
         return `
@@ -588,7 +582,7 @@ async function renderInvitationsSection() {
             return;
         }
         
-        // Créer un Set des profileIds des Gigachads
+        
         const gigachadProfileIds = new Set(
             gigachadsData.users
                 .filter(user => user.profileId !== null && user.profileId !== undefined)
@@ -597,21 +591,21 @@ async function renderInvitationsSection() {
         
         debug('📊 Gigachads found:', gigachadProfileIds.size);
         
-        // 🔧 CORRECTION: Déduplication plus stricte
+        
         const seenProfileIds = new Set();
-        const seenUsernames = new Set(); // Ajout d'un Set pour les usernames
+        const seenUsernames = new Set(); 
         
         const gigachadsWithInvites = allProfilesWithInvites
             .filter(profile => {
                 const profileId = profile.actor?.profileId;
                 const username = profile.actor?.name?.toLowerCase();
                 
-                // Vérifier si c'est un Gigachad avec des invitations
+                
                 if (!profileId || !gigachadProfileIds.has(profileId) || profile.invitesAvailable < 1) {
                     return false;
                 }
                 
-                // 🔧 DOUBLE VÉRIFICATION: profileId ET username
+                
                 if (seenProfileIds.has(profileId) || seenUsernames.has(username)) {
                     debug(`🔄 Duplicate found - ProfileId: ${profileId}, Username: ${username}`);
                     return false;
@@ -622,17 +616,17 @@ async function renderInvitationsSection() {
                 return true;
             })
             .sort((a, b) => b.invitesAvailable - a.invitesAvailable)
-            .slice(0, 5); // LIMITE À 5 LIGNES
+            .slice(0, 5); 
         
         debug('✅ Unique Gigachads with invites found:', gigachadsWithInvites.length);
         
-        // 🔧 DEBUG: Afficher les utilisateurs trouvés
+        
         gigachadsWithInvites.forEach((profile, index) => {
             const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
             debug(`${index + 1}. ProfileId: ${profile.actor.profileId}, Username: ${gigachad?.username || profile.actor?.name}, Invites: ${profile.invitesAvailable}`);
         });
         
-        // Mettre à jour le compteur
+        
         if (countElement) {
             countElement.textContent = gigachadsWithInvites.length;
         }
@@ -642,7 +636,7 @@ async function renderInvitationsSection() {
             return;
         }
         
-        // Créer le HTML
+       
         const html = gigachadsWithInvites.map(profile => {
             const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
             
@@ -651,7 +645,7 @@ async function renderInvitationsSection() {
             const inviteCount = profile.invitesAvailable || 0;
             const username = gigachad?.username || profile.actor?.name || displayName;
             
-            // 🔗 LIEN VERS TWITTER/X
+            
             const xUrl = `https://x.com/${username}`;
             
             return `
@@ -690,11 +684,11 @@ async function renderNewGigachadsSection() {
             return;
         }
         
-        // Prendre les Gigachads avec les profileIds les plus élevés (= plus récents)
+        
         const recentGigachads = gigachadsData.users
-            .filter(user => user.profileId) // S'assurer qu'il y a un profileId
-            .sort((a, b) => b.profileId - a.profileId) // Trier par profileId décroissant
-            .slice(0, 10); // Prendre les 10 plus récents pour avoir plus de chances d'en récupérer 5
+            .filter(user => user.profileId) 
+            .sort((a, b) => b.profileId - a.profileId) 
+            .slice(0, 10); 
         
         debug('✅ Recent Gigachads found:', recentGigachads.length);
         
@@ -703,7 +697,7 @@ async function renderNewGigachadsSection() {
             return;
         }
         
-        // Récupérer les vraies dates d'inscription depuis l'API Ethos
+        
         const profileIds = recentGigachads.map(g => g.profileId);
         
         try {
@@ -731,22 +725,22 @@ async function renderNewGigachadsSection() {
                 throw new Error('Invalid profiles data structure');
             }
             
-            // Associer les données des profils avec les gigachads
+            
             const gigachadsWithRealDates = recentGigachads.map(gigachad => {
                 const profileData = profilesData.data.values.find(p => p.id === gigachad.profileId);
                 if (profileData && profileData.createdAt) {
                     return {
                         ...gigachad,
-                        realCreatedAt: profileData.createdAt * 1000 // Convertir timestamp Unix en milliseconds
+                        realCreatedAt: profileData.createdAt * 1000 
                     };
                 }
                 return null;
-            }).filter(Boolean); // Enlever les null
+            }).filter(Boolean); 
             
-            // Trier par vraie date de création (plus récent en premier)
+            
             const sortedGigachads = gigachadsWithRealDates
                 .sort((a, b) => b.realCreatedAt - a.realCreatedAt)
-                .slice(0, 5); // Prendre les 5 plus récents
+                .slice(0, 5); 
             
             debug('✅ Sorted Gigachads with real dates:', sortedGigachads.length);
             
@@ -755,7 +749,7 @@ async function renderNewGigachadsSection() {
                 return;
             }
             
-            // Fonction pour calculer le temps écoulé
+            
             const getTimeAgo = (timestamp) => {
                 const now = Date.now();
                 const createdDate = timestamp;
@@ -775,14 +769,14 @@ async function renderNewGigachadsSection() {
                 }
             };
             
-            // Créer le HTML avec liens vers profils Ethos
+            
             const html = sortedGigachads.map(gigachad => {
                 const displayName = gigachad.displayName || gigachad.username || 'Unknown';
                 const avatarUrl = gigachad.avatarUrl || 'https://via.placeholder.com/35';
                 const timeAgo = getTimeAgo(gigachad.realCreatedAt);
                 const username = gigachad.username || displayName;
                 
-                // 🔗 LIEN VERS PROFIL ETHOS
+                
                 const profileUrl = `https://app.ethos.network/profile/x/${username}`;
                 
                 return `
@@ -818,7 +812,7 @@ async function renderRankChangesSection() {
     try {
         debug('🔄 Loading rank changes data...');
         
-        // Récupérer les activités récentes  
+        
         const activitiesData = await fetchRecentActivities();
         
         const vouches = activitiesData.vouches || [];
@@ -830,12 +824,12 @@ async function renderRankChangesSection() {
         
         debug('✅ Recent activities loaded:', vouches.length, 'vouches,', reviews.length, 'reviews');
         
-        // Fonction pour vérifier si une activité est d'aujourd'hui
+        
         const isToday = (timestamp) => {
             if (!timestamp) return false;
             
-            // Convertir le timestamp Unix en date
-            const activityDate = new Date(timestamp * 1000); // timestamp est en secondes, pas millisecondes
+            
+            const activityDate = new Date(timestamp * 1000); 
             const today = new Date();
             
             console.log('🔍 DEBUG - Comparing dates:', {
@@ -848,14 +842,14 @@ async function renderRankChangesSection() {
             return today.toDateString() === activityDate.toDateString();
         };
         
-        // Filtrer les activités d'aujourd'hui seulement
+        
         const todayVouches = vouches.filter(vouch => isToday(vouch.timestamp));
         const todayReviews = reviews.filter(review => isToday(review.timestamp));
         
         console.log('🔍 DEBUG - Today vouches:', todayVouches.length);
         console.log('🔍 DEBUG - Today reviews:', todayReviews.length);
         
-        // Si pas d'activités aujourd'hui, prendre les dernières 24h
+        
         let finalVouches = todayVouches;
         let finalReviews = todayReviews;
         
@@ -878,10 +872,10 @@ async function renderRankChangesSection() {
             console.log('🔍 DEBUG - Recent reviews (24h):', finalReviews.length);
         }
         
-        // Dictionnaire pour stocker les points gagnés par chaque utilisateur
+        
         const todayPoints = {};
         
-        // Fonction pour ajouter des points à un utilisateur
+        
         const addPoints = (userName, points, reason, avatarUrl) => {
             console.log('🔍 DEBUG - Adding points FOR TODAY:', userName, points, reason);
             
@@ -899,39 +893,39 @@ async function renderRankChangesSection() {
             todayPoints[userName].activities.push(reason);
         };
         
-        // Traiter les vouches d'aujourd'hui
+        
         finalVouches.forEach((vouch, index) => {
             const activityDate = new Date(vouch.timestamp * 1000);
             console.log(`🔍 DEBUG - Processing TODAY vouch ${index}:`, vouch.authorUser?.displayName, '->', vouch.subjectUser?.displayName, 'at', activityDate.toLocaleString());
             
             if (vouch.authorUser && vouch.subjectUser) {
-                // Points pour celui qui a donné le vouch (10 points)
+                
                 addPoints(vouch.authorUser.displayName, 10, `Vouch given (+10pts)`, vouch.authorUser.avatarUrl);
-                // Points pour celui qui a reçu le vouch (5 points)
+                
                 addPoints(vouch.subjectUser.displayName, 5, `Vouch received (+5pts)`, vouch.subjectUser.avatarUrl);
             }
         });
         
-        // Traiter les reviews d'aujourd'hui
+        
         finalReviews.forEach((review, index) => {
             const activityDate = new Date(review.timestamp * 1000);
             console.log(`🔍 DEBUG - Processing TODAY review ${index}:`, review.authorUser?.displayName, '->', review.subjectUser?.displayName, 'at', activityDate.toLocaleString());
             
             if (review.authorUser && review.subjectUser) {
-                // Points pour celui qui a donné le review (2 points)
+                
                 addPoints(review.authorUser.displayName, 2, `Review given (+2pts)`, review.authorUser.avatarUrl);
-                // Points pour celui qui a reçu le review (1 point)
+                
                 addPoints(review.subjectUser.displayName, 1, `Review received (+1pt)`, review.subjectUser.avatarUrl);
             }
         });
         
         console.log('🔍 DEBUG - Today points calculated:', todayPoints);
         
-        // Convertir en array et trier par points gagnés
+        
         const topGainersToday = Object.values(todayPoints)
-            .filter(userData => userData.points > 0) // Seulement ceux qui ont gagné des points
-            .sort((a, b) => b.points - a.points) // Trier par points décroissant
-            .slice(0, 5); // Prendre les 5 premiers
+            .filter(userData => userData.points > 0) 
+            .sort((a, b) => b.points - a.points) 
+            .slice(0, 5); 
         
         console.log('🔍 DEBUG - Top gainers today:', topGainersToday);
         
@@ -940,13 +934,13 @@ async function renderRankChangesSection() {
             return;
         }
         
-        // Créer le HTML
+        
         const html = topGainersToday.map((userData, index) => {
             const displayName = userData.displayName || 'Unknown';
             const avatarUrl = userData.avatarUrl || 'https://via.placeholder.com/35';
             const points = userData.points;
             
-            // Icône selon la position
+            
             const rankIcon = index === 0 ? '🚀' : index === 1 ? '⬆️' : '📈';
             
             return `
@@ -972,7 +966,7 @@ async function renderRankChangesSection() {
 }
 
 
-// ========== Main Application ==========
+
 class DailyRecapManager {
     constructor() {
         this.init();
@@ -1011,17 +1005,17 @@ class DailyRecapManager {
     async renderAllSections() {
         debug('📊 Rendering all sections...');
         
-        // Render header avec image
+        
         this.renderHeader();
         
-        // Fetch activities
+        
         const { vouches, reviews } = await fetchRecentActivities();
         
-        // Render sections
+        
         renderVouchesSection(vouches);
         renderReviewsSection(reviews);
         renderLeaderboardSection();
-        await renderInvitationsSection(); // Await car la fonction est async
+        await renderInvitationsSection(); 
         await renderNewGigachadsSection();
         await renderRankChangesSection();
         
@@ -1051,7 +1045,7 @@ class DailyRecapManager {
     }
 }
 
-// ========== Initialization ==========
+
 document.addEventListener('DOMContentLoaded', () => {
     debug('🚀 DOM loaded, initializing Daily Recap...');
     new DailyRecapManager();
