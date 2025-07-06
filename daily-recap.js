@@ -393,38 +393,53 @@ function renderVouchesSection(vouches) {
     const container = document.getElementById('vouches-list');
     
     if (!vouches || vouches.length === 0) {
-        container.innerHTML = '<div class="empty-state">No recent vouches available</div>';
+        container.innerHTML = '<div class="empty-state">No recent vouches</div>';
         return;
     }
 
     const recentVouches = vouches.slice(0, 5);
     
     const html = recentVouches.map(vouch => {
-        const authorName = vouch.authorUser?.displayName || vouch.authorUser?.username || 'Unknown';
-        const subjectName = vouch.subjectUser?.displayName || vouch.subjectUser?.username || 'Unknown';
+        const authorName = vouch.author?.name || vouch.author?.username || 'Unknown';
+        const subjectName = vouch.subject?.name || vouch.subject?.username || 'Unknown';
         
-        const authorAvatar = vouch.authorUser?.avatarUrl || 'https://via.placeholder.com/32';
-        const subjectAvatar = vouch.subjectUser?.avatarUrl || 'https://via.placeholder.com/32';
+        const authorAvatar = vouch.author?.avatar || 'https://via.placeholder.com/32';
+        const subjectAvatar = vouch.subject?.avatar || 'https://via.placeholder.com/32';
         
-        const timestamp = vouch.createdAt || vouch.timestamp || vouch.created_at;
+        const timestamp = vouch.timestamp || vouch.createdAt;
         const timeAgo = formatTimeAgo(timestamp);
         
         const stakeAmount = getStakedAmount(vouch);
         
+        // 🔗 RÉCUPÉRER L'ID CORRECT depuis data.id
+        const vouchId = vouch.data?.id;
+        
+        // Si pas d'ID, fallback vers le profil de la personne
+        let clickUrl;
+        if (vouchId) {
+            clickUrl = `https://app.ethos.network/activity/vouch/${vouchId}`;
+        } else {
+            // Fallback: lien vers le profil de la personne qui a reçu le vouch
+            const subjectUsername = vouch.subject?.username;
+            clickUrl = `https://app.ethos.network/profile/x/${subjectUsername}`;
+        }
+        
+        console.log(`🔍 DEBUG - Vouch URL: ${clickUrl}`); // Pour debug
+        
         return `
-            <div class="activity-item" data-type="vouch">
+            <div class="activity-item clickable" data-type="vouch" onclick="window.open('${clickUrl}', '_blank')">
                 <div class="activity-avatars">
                     <img src="${authorAvatar}" alt="${authorName}" class="avatar" 
-                         onerror="this.src='https://via.placeholder.com/40'">
+                         onerror="this.src='https://via.placeholder.com/32'">
                     <span class="activity-arrow"></span>
                     <img src="${subjectAvatar}" alt="${subjectName}" class="avatar" 
-                         onerror="this.src='https://via.placeholder.com/40'">
+                         onerror="this.src='https://via.placeholder.com/32'">
                 </div>
                 <div class="activity-content">
                     <div class="activity-header">
                         <div class="activity-main">
                             <strong class="author">${authorName}</strong> 
-                            <span class="action" data-action="vouched">vouched</span> 
+                            <span class="action" data-action="vouched">vouched for</span> 
                             <strong class="subject">${subjectName}</strong>
                         </div>
                         <div class="activity-time">${timeAgo}</div>
@@ -438,14 +453,14 @@ function renderVouchesSection(vouches) {
     }).join('');
 
     container.innerHTML = html;
-    debug(`✅ Rendered ${recentVouches.length} recent vouches`);
+    debug(`✅ Rendered ${recentVouches.length} recent vouches with correct IDs`);
 }
 
 function renderReviewsSection(reviews) {
     const container = document.getElementById('reviews-list');
     
     if (!reviews || reviews.length === 0) {
-        container.innerHTML = '<div class="empty-state">No recent reviews available</div>';
+        container.innerHTML = '<div class="empty-state">No recent reviews</div>';
         return;
     }
 
@@ -455,8 +470,8 @@ function renderReviewsSection(reviews) {
         const authorName = review.author?.name || review.author?.username || 'Unknown';
         const subjectName = review.subject?.name || review.subject?.username || 'Unknown';
         
-        const authorAvatar = getAvatarUrl(review.author?.profileId, authorName);
-        const subjectAvatar = getAvatarUrl(review.subject?.profileId, subjectName);
+        const authorAvatar = review.author?.avatar || 'https://via.placeholder.com/32';
+        const subjectAvatar = review.subject?.avatar || 'https://via.placeholder.com/32';
         
         const timestamp = review.timestamp || review.createdAt;
         const timeAgo = formatTimeAgo(timestamp);
@@ -466,8 +481,23 @@ function renderReviewsSection(reviews) {
                           score === 'negative' ? 'negative' : 'neutral';
         const scoreText = score.charAt(0).toUpperCase() + score.slice(1);
         
+        // 🔗 RÉCUPÉRER L'ID CORRECT depuis data.id
+        const reviewId = review.data?.id;
+        
+        // Si pas d'ID, fallback vers le profil de la personne
+        let clickUrl;
+        if (reviewId) {
+            clickUrl = `https://app.ethos.network/activity/review/${reviewId}`;
+        } else {
+            // Fallback: lien vers le profil de la personne qui a reçu la review
+            const subjectUsername = review.subject?.username;
+            clickUrl = `https://app.ethos.network/profile/x/${subjectUsername}`;
+        }
+        
+        console.log(`🔍 DEBUG - Review URL: ${clickUrl}`); // Pour debug
+        
         return `
-            <div class="activity-item" data-type="review">
+            <div class="activity-item clickable" data-type="review" onclick="window.open('${clickUrl}', '_blank')">
                 <div class="activity-avatars">
                     <img src="${authorAvatar}" alt="${authorName}" class="avatar" 
                          onerror="this.src='https://via.placeholder.com/32'">
@@ -493,7 +523,7 @@ function renderReviewsSection(reviews) {
     }).join('');
 
     container.innerHTML = html;
-    debug(`✅ Rendered ${reviews.length} recent reviews with scores`);
+    debug(`✅ Rendered ${recentReviews.length} recent reviews with correct IDs`);
 }
 
 function renderLeaderboardSection() {
@@ -521,6 +551,8 @@ function renderLeaderboardSection() {
         const rankBadge = getRankBadge(user.rank);
         const avatar = user.user.avatarUrl || 'https://via.placeholder.com/35';
         const displayName = user.user.displayName || user.user.username;
+         // 🔗 LIEN VERS PROFIL ETHOS
+        const profileUrl = `https://ethos.network/profile/${user.user.profileId}`;
         
         return `
             <div class="leaderboard-item ${rankBadge.class}">
@@ -565,30 +597,40 @@ async function renderInvitationsSection() {
         
         debug('📊 Gigachads found:', gigachadProfileIds.size);
         
-        // Filtrer UNIQUEMENT les Gigachads avec des invitations ET dédupliquer
+        // 🔧 CORRECTION: Déduplication plus stricte
         const seenProfileIds = new Set();
+        const seenUsernames = new Set(); // Ajout d'un Set pour les usernames
+        
         const gigachadsWithInvites = allProfilesWithInvites
             .filter(profile => {
                 const profileId = profile.actor?.profileId;
+                const username = profile.actor?.name?.toLowerCase();
                 
                 // Vérifier si c'est un Gigachad avec des invitations
                 if (!profileId || !gigachadProfileIds.has(profileId) || profile.invitesAvailable < 1) {
                     return false;
                 }
                 
-                // Vérifier si on a déjà vu ce profileId (déduplication)
-                if (seenProfileIds.has(profileId)) {
-                    debug('🔄 Duplicate found for profileId:', profileId);
+                // 🔧 DOUBLE VÉRIFICATION: profileId ET username
+                if (seenProfileIds.has(profileId) || seenUsernames.has(username)) {
+                    debug(`🔄 Duplicate found - ProfileId: ${profileId}, Username: ${username}`);
                     return false;
                 }
                 
                 seenProfileIds.add(profileId);
+                seenUsernames.add(username);
                 return true;
             })
             .sort((a, b) => b.invitesAvailable - a.invitesAvailable)
             .slice(0, 5); // LIMITE À 5 LIGNES
         
         debug('✅ Unique Gigachads with invites found:', gigachadsWithInvites.length);
+        
+        // 🔧 DEBUG: Afficher les utilisateurs trouvés
+        gigachadsWithInvites.forEach((profile, index) => {
+            const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
+            debug(`${index + 1}. ProfileId: ${profile.actor.profileId}, Username: ${gigachad?.username || profile.actor?.name}, Invites: ${profile.invitesAvailable}`);
+        });
         
         // Mettre à jour le compteur
         if (countElement) {
@@ -600,16 +642,20 @@ async function renderInvitationsSection() {
             return;
         }
         
-        // Créer le HTML (MÊME FORMAT QUE LE LEADERBOARD)
+        // Créer le HTML
         const html = gigachadsWithInvites.map(profile => {
             const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
             
             const displayName = gigachad?.displayName || profile.actor?.name || 'Unknown';
             const avatarUrl = gigachad?.avatarUrl || profile.actor?.avatar || 'https://via.placeholder.com/35';
             const inviteCount = profile.invitesAvailable || 0;
+            const username = gigachad?.username || profile.actor?.name || displayName;
+            
+            // 🔗 LIEN VERS TWITTER/X
+            const xUrl = `https://x.com/${username}`;
             
             return `
-                <div class="leaderboard-item">
+                <div class="leaderboard-item clickable" onclick="window.open('${xUrl}', '_blank')">
                     <div class="rank">🎫</div>
                     <img src="${avatarUrl}" alt="${displayName}" class="avatar" 
                          onerror="this.src='https://via.placeholder.com/35'">
@@ -629,6 +675,7 @@ async function renderInvitationsSection() {
         container.innerHTML = '<div class="empty-state">Error loading invitations</div>';
     }
 }
+
 
 async function renderNewGigachadsSection() {
     const container = document.getElementById('new-gigachads-list');
@@ -728,14 +775,18 @@ async function renderNewGigachadsSection() {
                 }
             };
             
-            // Créer le HTML
+            // Créer le HTML avec liens vers profils Ethos
             const html = sortedGigachads.map(gigachad => {
                 const displayName = gigachad.displayName || gigachad.username || 'Unknown';
                 const avatarUrl = gigachad.avatarUrl || 'https://via.placeholder.com/35';
                 const timeAgo = getTimeAgo(gigachad.realCreatedAt);
+                const username = gigachad.username || displayName;
+                
+                // 🔗 LIEN VERS PROFIL ETHOS
+                const profileUrl = `https://app.ethos.network/profile/x/${username}`;
                 
                 return `
-                    <div class="leaderboard-item">
+                    <div class="leaderboard-item clickable" onclick="window.open('${profileUrl}', '_blank')">
                         <div class="rank">🔥</div>
                         <img src="${avatarUrl}" alt="${displayName}" class="avatar" 
                              onerror="this.src='https://via.placeholder.com/35'">
@@ -748,7 +799,7 @@ async function renderNewGigachadsSection() {
             }).join('');
             
             container.innerHTML = html;
-            debug(`✅ Rendered ${sortedGigachads.length} new Gigachads with real dates`);
+            debug(`✅ Rendered ${sortedGigachads.length} new Gigachads with profile links`);
             
         } catch (apiError) {
             debug('❌ Error fetching profiles from API:', apiError);
@@ -919,7 +970,6 @@ async function renderRankChangesSection() {
         container.innerHTML = '<div class="empty-state">Error loading rank changes</div>';
     }
 }
-
 
 
 // ========== Main Application ==========
