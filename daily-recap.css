@@ -21,7 +21,6 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Header compact */
 /* Header layout */
 .header-content {
     display: flex;
@@ -41,7 +40,6 @@ body {
     justify-content: center;
 }
 
-/* Bouton Leaderboard */
 /* Bouton style journal vintage */
 .leaderboard-button {
     display: inline-flex;
@@ -218,7 +216,6 @@ body {
     font-weight: 700;
 }
 
-/* ========== LISTES D'ACTIVITÉS ========== */
 .activity-list {
     padding: 15px;
     flex: 1;
@@ -239,7 +236,7 @@ body {
     border-bottom: none;
 }
 
-/* ========== AVATARS ========== */
+
 .activity-avatars {
     display: flex;
     align-items: center;
@@ -259,7 +256,6 @@ body {
     background-color: #f0f0f0;
 }
 
-/* ========== FLÈCHES ========== */
 .activity-arrow {
     display: inline-block;
     width: 12px;
@@ -302,7 +298,6 @@ body {
     background-color: #3FC380;
 }
 
-/* ========== CONTENU ACTIVITÉ ========== */
 .activity-content {
     flex: 1;
     min-width: 0;
@@ -385,7 +380,6 @@ body {
     font-size: 0.95em !important;
 }
 
-/* ========== COULEURS ACTIONS ========== */
 .action[data-action="vouched"] {
     color: #4A90E2;
     font-weight: 700;
@@ -414,21 +408,21 @@ body {
     color: #666666;
 }
 
-/* ========== LEADERBOARD - VERSION ÉQUILIBRÉE ========== */
+
 .leaderboard-list {
-    padding: 15px;               /* Remonté de 12px à 15px */
+    padding: 15px;              
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;                    /* Remonté de 6px à 8px */
+    gap: 8px;                   
 }
 
 .leaderboard-item {
     display: flex;
     align-items: center;
-    gap: 12px;                   /* Remonté de 10px à 12px */
-    padding: 10px 12px;          /* Remonté de 8px à 10px */
-    border-radius: 8px;          /* Remonté de 6px à 8px */
+    gap: 12px;                   
+    padding: 10px 12px;          
+    border-radius: 8px;          
     background-color: #f8f8f8;
     border: 1px solid #e0e0e0;
     transition: all 0.2s;
@@ -440,8 +434,8 @@ body {
 }
 
 .leaderboard-item .avatar {
-    width: 34px !important;      /* Remonté de 30px à 34px */
-    height: 34px !important;     /* Remonté de 30px à 34px */
+    width: 34px !important;      
+    height: 34px !important;     
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #333333;
@@ -455,21 +449,20 @@ body {
 .user-name {
     font-weight: 700;
     color: #000000;
-    font-size: 0.95em !important;   /* Remonté de 0.9em à 0.95em */
+    font-size: 0.95em !important;   
     text-transform: capitalize !important;
-    margin-bottom: 3px;             /* Remonté de 2px à 3px */
+    margin-bottom: 3px;             
     word-wrap: break-word;
     hyphens: auto;
-    line-height: 1.15;              /* Remonté de 1.1 à 1.15 */
+    line-height: 1.15;             
 }
 
 .user-score {
-    font-size: 0.85em !important;   /* Remonté de 0.8em à 0.85em */
+    font-size: 0.85em !important;   
     color: #8b4513;
     font-weight: 600;
 }
 
-/* ========== STYLES DES RANGS - VERSION ÉQUILIBRÉE ========== */
 .leaderboard-item .rank {
     font-size: 0 !important;
     font-weight: 900;
@@ -478,7 +471,7 @@ body {
     background: none;
     box-shadow: none;
     border-radius: 0;
-    min-width: 28px;                /* Remonté de 25px à 28px */
+    min-width: 28px;                
     text-align: center;
     flex-shrink: 0;
     display: flex;
@@ -487,7 +480,7 @@ body {
 }
 
 .leaderboard-item .rank::after {
-    font-size: 1.3rem !important;   /* Remonté de 1.2rem à 1.3rem */
+    font-size: 1.3rem !important;   
     font-weight: 900 !important;    
     color: inherit;
     opacity: 1 !important;          
@@ -518,7 +511,7 @@ body {
     color: #000000;                  
 }
 
-/* Supprime tous les styles d'encadrement */
+
 .leaderboard-item.gold .rank,
 .leaderboard-item.silver .rank,
 .leaderboard-item.bronze .rank,
@@ -529,7 +522,7 @@ body {
     box-shadow: none !important;
 }
 
-/* ========== NOUVELLE SECTION: INVITATIONS AVAILABLE ========== */
+
 .invitation-list {
     padding: 15px;
     flex: 1;
@@ -594,7 +587,7 @@ body {
     flex-shrink: 0;
 }
 
-/* Retirer l'épingle hover et garder l'heure à droite */
+
 .activity-item.clickable {
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -604,7 +597,7 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Garder l'heure à droite */
+
 .activity-header {
     display: flex;
     justify-content: space-between;
@@ -617,13 +610,13 @@ body {
     flex-shrink: 0;
 }
 
-/* Retirer toute épingle ou indicateur hover */
+
 .activity-item::after,
 .activity-item::before {
     display: none !important;
 }
 
-/* Pour les reviews avec score inline */
+
 .activity-time-container {
     display: flex;
     align-items: center;
@@ -655,8 +648,6 @@ body {
 }
 
 
-
-/* ========== ÉTATS VIDES ========== */
 .loading, .empty-state {
     display: flex;
     align-items: center;
@@ -697,7 +688,7 @@ body {
     }
 }
 
-/* ========== RESPONSIVE ========== */
+
 @media (max-width: 1200px) {
     .recap-grid {
         grid-template-columns: 1fr 1fr;
