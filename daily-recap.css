@@ -22,6 +22,109 @@ body {
 }
 
 /* Header compact */
+/* Header layout */
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #8B4513;
+}
+
+.left-section, .center-section, .right-section {
+    flex: 1;
+}
+
+.center-section {
+    display: flex;
+    justify-content: center;
+}
+
+/* Bouton Leaderboard */
+/* Bouton style journal vintage */
+.leaderboard-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #f5f5dc;
+    color: #8B4513;
+    text-decoration: none;
+    border: 2px solid #8B4513;
+    border-radius: 0;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Effet journal ancien */
+.leaderboard-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(139, 69, 19, 0.1) 1px,
+        rgba(139, 69, 19, 0.1) 2px
+    );
+    pointer-events: none;
+}
+
+.leaderboard-button:hover {
+    background: #8B4513;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 3px 6px rgba(0,0,0,0.3);
+}
+
+.leaderboard-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.2),
+        0 1px 2px rgba(0,0,0,0.2);
+}
+
+.button-icon {
+    font-size: 16px;
+    filter: sepia(1) hue-rotate(20deg);
+}
+
+/* Style vintage pour l'icône */
+.leaderboard-button:hover .button-icon {
+    filter: sepia(0) brightness(1.2);
+}
+
+
+/* Date section styling */
+.date-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #8B4513;
+}
+
+.calendar-icon {
+    font-size: 16px;
+}
+
+
 .recap-header {
     background-color: #f8f8f8;
     border-bottom: 2px solid #000000;
@@ -490,6 +593,68 @@ body {
     font-weight: 700;
     flex-shrink: 0;
 }
+
+/* Retirer l'épingle hover et garder l'heure à droite */
+.activity-item.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.activity-item.clickable:hover {
+    background-color: #f8f9fa;
+}
+
+/* Garder l'heure à droite */
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.activity-time {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Retirer toute épingle ou indicateur hover */
+.activity-item::after,
+.activity-item::before {
+    display: none !important;
+}
+
+/* Pour les reviews avec score inline */
+.activity-time-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.review-type-inline {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.review-type-inline.positive {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.review-type-inline.negative {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.review-type-inline.neutral {
+    background-color: #e2e3e5;
+    color: #495057;
+}
+
+
 
 /* ========== ÉTATS VIDES ========== */
 .loading, .empty-state {
