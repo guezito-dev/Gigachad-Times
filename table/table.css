@@ -343,24 +343,6 @@ body {
     color: #000000;
 }
 
-.leaderboard-table tbody tr:nth-child(1) td[data-label="Rank"] {
-    color: #ffd700;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.leaderboard-table tbody tr:nth-child(2) td[data-label="Rank"] {
-    color: #c0c0c0;
-    font-size: 17px;
-    font-weight: 900;
-}
-
-.leaderboard-table tbody tr:nth-child(3) td[data-label="Rank"] {
-    color: #cd7f32;
-    font-size: 16px;
-    font-weight: 900;
-}
-
 /* ========== CONTENEUR DES BOUTONS ========== */
 .action-buttons {
     display: flex;
@@ -1096,4 +1078,19 @@ body {
 
 .ranking-system-container:hover .ranking-tooltip {
     animation: tooltipFadeIn 0.3s ease-out;
+}
+/* ========== RANGS COLORÉS SIMPLES ========== */
+.rank-gold {
+    color: #FFD700 !important;
+    font-weight: 900 !important;
+}
+
+.rank-silver {
+    color: #C0C0C0 !important;
+    font-weight: 900 !important;
+}
+
+.rank-bronze {
+    color: #CD7F32 !important;
+    font-weight: 900 !important;
 }
