@@ -448,6 +448,7 @@ function renderVouchesSection(vouches) {
 
     container.innerHTML = html;
     debug(`✅ Rendered ${recentVouches.length} recent vouches with correct IDs`);
+    return html;
 }
 
 function renderReviewsSection(reviews) {
@@ -518,6 +519,7 @@ function renderReviewsSection(reviews) {
 
     container.innerHTML = html;
     debug(`✅ Rendered ${recentReviews.length} recent reviews with correct IDs`);
+    return html;
 }
 
 function renderLeaderboardSection() {
@@ -563,6 +565,7 @@ function renderLeaderboardSection() {
 
     container.innerHTML = html;
     debug(`✅ Rendered top 5 leaderboard`);
+    return html;
 }
 
 async function renderInvitationsSection() {
@@ -663,6 +666,7 @@ async function renderInvitationsSection() {
         
         container.innerHTML = html;
         debug(`✅ Rendered ${gigachadsWithInvites.length} unique Gigachads with invitations`);
+        return html;
         
     } catch (error) {
         debug('❌ Error rendering invitations section:', error);
@@ -793,6 +797,7 @@ async function renderNewGigachadsSection() {
             
             container.innerHTML = html;
             debug(`✅ Rendered ${sortedGigachads.length} new Gigachads with profile links`);
+            return html;
             
         } catch (apiError) {
             debug('❌ Error fetching profiles from API:', apiError);
@@ -957,6 +962,7 @@ async function renderRankChangesSection() {
         
         container.innerHTML = html;
         debug(`✅ Rendered ${topGainersToday.length} rank changes for today`);
+        return html;
         
     } catch (error) {
         debug('❌ Error rendering rank changes section:', error);
@@ -964,18 +970,25 @@ async function renderRankChangesSection() {
     }
 }
 
-
 class DailyRecapManager {
     constructor() {
+        this.cache = new Map(); // Garde pour le cache temporaire
+        this.cacheExpiry = 5 * 60 * 1000; // 5 minutes
+        this.clearExpiredCache(); // Nettoie le cache expiré au démarrage
         this.init();
     }
+
 
     async init() {
         try {
             debug('🚀 Daily Recap initialization...');
-            this.showLoading();
-            await this.loadAllData();
-            await this.renderAllSections();
+            
+            // 1. Afficher le cache immédiatement
+            await this.loadFromCache();
+            
+            // 2. Puis charger les nouvelles données en arrière-plan
+            this.loadFreshDataInBackground();
+            
             this.updateCurrentDate();
             debug('✅ Daily Recap initialized successfully');
         } catch (error) {
@@ -984,13 +997,125 @@ class DailyRecapManager {
         }
     }
 
+    // 📦 Charger depuis le cache
+    async loadFromCache() {
+        debug('📦 Loading from cache...');
+        this.renderHeader();
+        
+        const sections = [
+            'vouches', 'reviews', 'leaderboard', 
+            'new-gigachads', 'rank-changes', 'invitations'
+        ];
+        
+        let hasCache = false;
+        
+        for (const section of sections) {
+            const cachedHtml = this.getFromCache(section);
+            if (cachedHtml) {
+                this.renderCachedSection(section, cachedHtml);
+                hasCache = true;
+            } else {
+                this.showLoadingForSection(section);
+            }
+        }
+        
+        if (!hasCache) {
+            debug('📦 No cache found, loading fresh data immediately');
+            await this.loadAllData();
+            await this.renderAllSections();
+        }
+    }
+
+    // 🔄 Charger les données fraîches en arrière-plan
+    async loadFreshDataInBackground() {
+        debug('🔄 Loading fresh data in background...');
+        
+        try {
+            await this.loadAllData();
+            await this.renderAllSectionsWithCache();
+        } catch (error) {
+            debug('❌ Error loading fresh data:', error);
+        }
+    }
+
+    // 💾 Sauvegarder dans le cache
+    saveToCache(key, html) {
+    const cacheData = {
+        html: html,
+        timestamp: Date.now()
+    };
+    
+    try {
+        localStorage.setItem(`daily-recap-cache-${key}`, JSON.stringify(cacheData));
+        debug(`💾 Saved ${key} to localStorage cache`);
+    } catch (error) {
+        debug(`❌ Error saving ${key} to cache:`, error);
+    }
+    }
+
+    // 📦 Récupérer depuis le cache
+    getFromCache(key) {
+    try {
+        const cached = localStorage.getItem(`daily-recap-cache-${key}`);
+        if (cached) {
+            const cacheData = JSON.parse(cached);
+            if (Date.now() - cacheData.timestamp < this.cacheExpiry) {
+                debug(`✅ ${key} loaded from localStorage cache`);
+                return cacheData.html;
+            } else {
+                // Cache expiré, le supprimer
+                localStorage.removeItem(`daily-recap-cache-${key}`);
+                debug(`🗑️ ${key} cache expired and removed`);
+            }
+        }
+    } catch (error) {
+        debug(`❌ Error loading ${key} from cache:`, error);
+    }
+    return null;
+    }
+
+        clearExpiredCache() {
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith('daily-recap-cache-')) {
+                    try {
+                        const cached = localStorage.getItem(key);
+                        if (cached) {
+                            const cacheData = JSON.parse(cached);
+                            if (Date.now() - cacheData.timestamp >= this.cacheExpiry) {
+                                localStorage.removeItem(key);
+                                debug(`🗑️ Removed expired cache: ${key}`);
+                            }
+                        }
+                    } catch (error) {
+                        localStorage.removeItem(key);
+                        debug(`🗑️ Removed corrupted cache: ${key}`);
+                    }
+                }
+            });
+        }
+
+    // 🔄 Afficher le contenu en cache pour une section
+    renderCachedSection(sectionName, cachedHtml) {
+        const element = document.getElementById(`${sectionName}-list`);
+        if (element) {
+            element.innerHTML = cachedHtml;
+            debug(`✅ ${sectionName} displayed from cache`);
+        }
+    }
+
+    // ⏳ Afficher le loading pour une section spécifique
+    showLoadingForSection(sectionName) {
+        const element = document.getElementById(`${sectionName}-list`);
+        if (element) {
+            element.innerHTML = '<div class="loading">Loading...</div>';
+        }
+    }
+
     showLoading() {
         const sections = ['vouches', 'reviews', 'leaderboard', 'invitations', 'new-gigachads', 'rank-changes'];
         sections.forEach(section => {
-            const element = document.getElementById(`${section}-list`);
-            if (element) {
-                element.innerHTML = '<div class="loading">Loading...</div>';
-            }
+            this.showLoadingForSection(section);
         });
     }
 
@@ -1000,28 +1125,72 @@ class DailyRecapManager {
         debug('✅ All data loaded');
     }
 
+    async renderAllSectionsWithCache() {
+        debug('📊 Rendering all sections with cache...');
+        
+        // 1. Fetch activities
+        const { vouches, reviews } = await fetchRecentActivities();
+        
+        // 2. Render sections rapides avec la même logique que les autres
+        const vouchesHtml = renderVouchesSection(vouches);
+        this.updateSectionAndCache('vouches', vouchesHtml);
+        
+        const reviewsHtml = renderReviewsSection(reviews);
+        this.updateSectionAndCache('reviews', reviewsHtml);
+        
+        const leaderboardHtml = renderLeaderboardSection();
+        this.updateSectionAndCache('leaderboard', leaderboardHtml);
+        
+        // 3. Sections plus lentes avec return (inchangé)
+        const newGigachadsHtml = await renderNewGigachadsSection();
+        this.updateSectionAndCache('new-gigachads', newGigachadsHtml);
+        
+        const rankChangesHtml = await renderRankChangesSection();
+        this.updateSectionAndCache('rank-changes', rankChangesHtml);
+        
+        const invitationsHtml = await renderInvitationsSection();
+        this.updateSectionAndCache('invitations', invitationsHtml);
+        
+        debug('✅ All sections rendered with cache');
+    }
+
+
+    // 📊 Rendu initial (sans cache)
     async renderAllSections() {
-    debug('📊 Rendering all sections...');
-    
-    // 1. Render header
-    this.renderHeader();
-    
-    // 2. Fetch activities (nécessaire pour vouches, reviews, rank changes)
-    const { vouches, reviews } = await fetchRecentActivities();
-    
-    // 3. Render sections rapides d'abord
-    renderVouchesSection(vouches);
-    renderReviewsSection(reviews);
-    renderLeaderboardSection();
-    
-    // 4. Render New Gigachads et Rank Changes
-    await renderNewGigachadsSection();
-    await renderRankChangesSection();
-    
-    // 5. Invitations EN DERNIER (le plus lent)
-    await renderInvitationsSection();
-    
-    debug('✅ All sections rendered');
+        debug('📊 Rendering all sections...');
+        
+        // 1. Render header
+        this.renderHeader();
+        
+        // 2. Fetch activities
+        const { vouches, reviews } = await fetchRecentActivities();
+        
+        // 3. Render sections rapides
+        renderVouchesSection(vouches);
+        renderReviewsSection(reviews);
+        renderLeaderboardSection();
+        
+        // 4. Render sections lentes
+        await renderNewGigachadsSection();
+        await renderRankChangesSection();
+        await renderInvitationsSection();
+        
+        debug('✅ All sections rendered');
+    }
+
+    // 🔄 Mettre à jour section et cache
+    updateSectionAndCache(sectionName, newHtml) {
+        const element = document.getElementById(`${sectionName}-list`);
+        if (element && newHtml) {
+            const oldContent = element.innerHTML;
+            if (oldContent !== newHtml) {
+                element.innerHTML = newHtml;
+                element.classList.add('updated');
+                setTimeout(() => element.classList.remove('updated'), 1000);
+                this.saveToCache(sectionName, newHtml);
+                debug(`✨ ${sectionName} updated and cached`);
+            }
+        }
     }
 
     renderHeader() {
@@ -1046,7 +1215,6 @@ class DailyRecapManager {
         });
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     debug('🚀 DOM loaded, initializing Daily Recap...');
