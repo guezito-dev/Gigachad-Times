@@ -170,9 +170,6 @@ function renderTable(data) {
     data.forEach((user, index) => {
         const row = document.createElement('tr');
         
-        // Supprimer les émojis médailles - juste afficher le rang
-        const rankDisplay = user.rank;
-
         // Calculer les reviews manquantes
         const missingReviews = getMissingReviews(user, data);
         const missingCount = missingReviews.length;
@@ -182,6 +179,20 @@ function renderTable(data) {
         const reviewsGivenData = user.stats.reviewsGivenAvatars || [];
         const vouchesReceivedData = user.stats.vouchesReceivedAvatars || [];
         const reviewsReceivedData = user.stats.reviewsReceivedAvatars || [];
+
+        // 🎯 CORRECTION : Utiliser UNIQUEMENT le rang original (user.rank)
+        let rankDisplay;
+        
+        if (user.rank === 1) {
+            rankDisplay = '<span class="rank-gold">#1</span>';
+        } else if (user.rank === 2) {
+            rankDisplay = '<span class="rank-silver">#2</span>';
+        } else if (user.rank === 3) {
+            rankDisplay = '<span class="rank-bronze">#3</span>';
+        } else {
+            // Tous les autres rangs en noir
+            rankDisplay = '#' + user.rank;
+        }
 
         row.innerHTML = `
             <td data-label="Rank">${rankDisplay}</td>
@@ -216,6 +227,7 @@ function renderTable(data) {
         tableBody.appendChild(row);
     });
 }
+
 
 // Fonction de tri bidirectionnelle
 function sortTable(key) {
