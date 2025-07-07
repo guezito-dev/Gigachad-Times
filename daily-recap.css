@@ -859,3 +859,30 @@ body {
 .leaderboard-button:active {
     transform: scale(0.95);
 }
+
+/* ========== CORRECTION LOGO MOBILE ========== */
+@media (max-width: 768px) {
+    .header-logo {
+        height: 30px; /* Plus petit sur mobile */
+        transform: translateY(-8px); /* Moins décalé vers le haut */
+    }
+    
+    .title-container h1 {
+        font-size: 1.4em; /* Titre plus petit sur mobile */
+        align-items: flex-start; /* Alignement en haut */
+    }
+    
+    .logo-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    /* Alternative si le logo pose encore problème */
+    .header-logo {
+        height: 25px;
+        transform: translateY(-4px);
+        margin-left: 0;
+    }
+}
+
