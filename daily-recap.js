@@ -670,7 +670,6 @@ async function renderInvitationsSection() {
     }
 }
 
-
 async function renderNewGigachadsSection() {
     const container = document.getElementById('new-gigachads-list');
     
@@ -966,7 +965,6 @@ async function renderRankChangesSection() {
 }
 
 
-
 class DailyRecapManager {
     constructor() {
         this.init();
@@ -1003,23 +1001,27 @@ class DailyRecapManager {
     }
 
     async renderAllSections() {
-        debug('📊 Rendering all sections...');
-        
-        
-        this.renderHeader();
-        
-        
-        const { vouches, reviews } = await fetchRecentActivities();
-        
-        
-        renderVouchesSection(vouches);
-        renderReviewsSection(reviews);
-        renderLeaderboardSection();
-        await renderInvitationsSection(); 
-        await renderNewGigachadsSection();
-        await renderRankChangesSection();
-        
-        debug('✅ All sections rendered');
+    debug('📊 Rendering all sections...');
+    
+    // 1. Render header
+    this.renderHeader();
+    
+    // 2. Fetch activities (nécessaire pour vouches, reviews, rank changes)
+    const { vouches, reviews } = await fetchRecentActivities();
+    
+    // 3. Render sections rapides d'abord
+    renderVouchesSection(vouches);
+    renderReviewsSection(reviews);
+    renderLeaderboardSection();
+    
+    // 4. Render New Gigachads et Rank Changes
+    await renderNewGigachadsSection();
+    await renderRankChangesSection();
+    
+    // 5. Invitations EN DERNIER (le plus lent)
+    await renderInvitationsSection();
+    
+    debug('✅ All sections rendered');
     }
 
     renderHeader() {
