@@ -1123,3 +1123,38 @@ body {
         margin-left: 0;
     }
 }
+
+/* ========== CORRECTION TOOLTIP MOBILE ========== */
+@media (max-width: 768px) {
+    /* Rendre le tooltip visible au tap sur mobile */
+    .ranking-system-container {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    /* Tooltip toujours visible sur mobile lors du tap */
+    .ranking-system-container:active .ranking-tooltip,
+    .ranking-system-container:focus .ranking-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Positionner le tooltip correctement sur mobile */
+    .ranking-tooltip {
+        position: fixed; /* Important pour mobile */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        width: 90vw;
+        max-width: 320px;
+        z-index: 9999;
+    }
+    
+    /* Supprimer les flèches sur mobile */
+    .ranking-tooltip::before,
+    .ranking-tooltip::after {
+        display: none;
+    }
+}
