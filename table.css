@@ -1,0 +1,801 @@
+/* ========== RESET ET BASE ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background-color: #f5f5dc;
+    color: #333333;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+/* ========== CONTAINER PRINCIPAL ========== */
+.recap-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== HEADER (IDENTIQUE AU DAILY RECAP) ========== */
+.recap-header {
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #000000;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.title-container h1 {
+    font-size: 1.8em;
+    font-weight: 900;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-logo {
+    height: 40px;
+    width: auto;
+    margin-left: 1px;
+    vertical-align: top;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+    transform: translateY(-12px);
+}
+
+.header-logo:hover {
+    transform: scale(1.1);
+}
+
+.subtitle {
+    font-size: 0.9em;
+    color: #8b4513;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.center-section {
+    display: flex;
+    justify-content: center;
+}
+
+/* ========== BOUTON STYLE JOURNAL VINTAGE ========== */
+.leaderboard-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #f5f5dc;
+    color: #8B4513;
+    text-decoration: none;
+    border: 2px solid #8B4513;
+    border-radius: 0;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.leaderboard-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(139, 69, 19, 0.1) 1px,
+        rgba(139, 69, 19, 0.1) 2px
+    );
+    pointer-events: none;
+}
+
+.leaderboard-button:hover {
+    background: #8B4513;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 3px 6px rgba(0,0,0,0.3);
+}
+
+.leaderboard-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.2),
+        0 1px 2px rgba(0,0,0,0.2);
+}
+
+.date {
+    font-size: 0.9em;
+    color: #666666;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date i {
+    color: #8b4513;
+}
+
+/* ========== SECTION TABLEAU ========== */
+.table-section {
+    border: 2px solid #000000;
+    background-color: #ffffff;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #000000;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header h2 {
+    font-size: 1em;
+    font-weight: 700;
+    color: #000000;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-header i {
+    color: #8b4513;
+    font-size: 0.9em;
+}
+
+/* ========== TABLEAU STYLE JOURNAL ========== */
+.table-container {
+    overflow-x: auto;
+    background-color: #ffffff;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.leaderboard-table thead {
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #000000;
+}
+
+/* ========== HEADER DU TABLEAU - CENTRAGE ET FLÈCHES ========== */
+.leaderboard-table th {
+    background-color: #f8f8f8;
+    border: 1px solid #000000;
+    padding: 15px 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #000000;
+    text-align: center;        /* Centre tous les titres */
+    vertical-align: middle;
+    position: relative;
+    cursor: default;
+    border-right: 1px solid #ddd;
+}
+
+.leaderboard-table th:last-child {
+    border-right: none;
+}
+
+.leaderboard-table th.sortable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+/* ========== CELLULES TRIABLES (HEADER) ========== */
+.leaderboard-table th.sortable-cell {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.leaderboard-table th.sortable-cell:hover {
+    background-color: #e8e8e8;
+}
+
+.leaderboard-table th.sortable:hover {
+    background-color: #f0f0f0;
+    color: #8b4513;
+}
+
+/* ========== FLÈCHES DE TRI (ANCIENNES) ========== */
+.leaderboard-table th.sortable-cell i {
+    margin-left: 8px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.leaderboard-table th.sortable-cell:hover i {
+    opacity: 1;
+}
+
+
+.leaderboard-table th.sortable i {
+    margin-left: 8px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.leaderboard-table th.sortable:hover i {
+    opacity: 1;
+}
+
+.leaderboard-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.leaderboard-table tbody tr:nth-child(even):hover {
+    background-color: #f0f0f0;
+}
+
+/* ========== CELLULES DU TABLEAU ========== */
+.leaderboard-table td {
+    padding: 12px 15px;
+    border-right: 1px solid #f0f0f0;
+    color: #333333;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;        /* Centre le contenu des cellules */
+}
+
+.leaderboard-table td:last-child {
+    border-right: none;
+}
+
+/* ========== EXCEPTION POUR LA COLONNE USER ========== */
+.leaderboard-table td.user-cell {
+    text-align: left;          /* Garde USER aligné à gauche */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ========== CELLULES TRIABLES (DONNÉES) ========== */
+.leaderboard-table td.sortable-cell {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.leaderboard-table td.sortable-cell:hover {
+    background-color: #f8f8f8;
+}
+
+/* ========== CELLULES SPÉCIALES ========== */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 200px;
+}
+
+.img-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #333333;
+    object-fit: cover;
+    background-color: #f0f0f0;
+}
+
+.user-name {
+    font-weight: 700;
+    color: #000000;
+    text-transform: capitalize;
+}
+
+/* ========== RANGS AVEC STYLE JOURNAL ========== */
+.leaderboard-table td[data-label="Rank"] {
+    font-weight: 900;
+    font-size: 16px;
+    text-align: center;
+    color: #000000;
+}
+
+.leaderboard-table tbody tr:nth-child(1) td[data-label="Rank"] {
+    color: #ffd700;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.leaderboard-table tbody tr:nth-child(2) td[data-label="Rank"] {
+    color: #c0c0c0;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.leaderboard-table tbody tr:nth-child(3) td[data-label="Rank"] {
+    color: #cd7f32;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+/* ========== CONTENEUR DES BOUTONS ========== */
+.action-buttons {
+    display: flex;
+    align-items: center; /* Aligne tous les boutons sur la même ligne */
+    gap: 8px;
+    justify-content: center;
+}
+
+/* ========== BOUTONS UNIFORMES ========== */
+.btn-review-me, .ethos-link, .twitter-link {
+    padding: 6px 12px;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 32px;           /* Hauteur fixe au lieu de min-height */
+    font-family: 'Times New Roman', serif;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 1px 2px rgba(0,0,0,0.2);
+    vertical-align: middle; /* Force l'alignement vertical */
+    line-height: 1;         /* Uniformise la hauteur du texte */
+}
+
+.btn-review-me {
+    background: #f5f5dc;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    cursor: pointer;
+}
+
+.btn-review-me:hover {
+    background: #8B4513;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 2px 4px rgba(0,0,0,0.3);
+}
+
+.ethos-link {
+    background: #f5f5dc;
+    border: 2px solid #4A90E2;
+    color: #4A90E2;
+}
+
+.ethos-link:hover {
+    background: #4A90E2;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+}
+
+.twitter-link {
+    background: #f5f5dc;
+    border: 2px solid #1DA1F2;
+    color: #1DA1F2;
+}
+
+.twitter-link:hover {
+    background: #1DA1F2;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+}
+
+/* ========== MODAL STYLE JOURNAL ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #ffffff;
+    border: 3px solid #000000;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 2px solid #000000;
+    background-color: #f8f8f8;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: l;
+    letter-spacing: 1px;
+}
+
+.close-btn {
+    background: #f5f5dc;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    font-size: 16px;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: #8B4513;
+    color: #f5f5dc;
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.missing-reviews-list {
+    margin-top: 15px;
+}
+
+.missing-review-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    transition: all 0.2s ease;
+}
+
+.missing-review-item:hover {
+    background-color: #f0f0f0;
+    border-color: #8B4513;
+}
+
+.avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid #333333;
+    object-fit: cover;
+    background-color: #f0f0f0;
+}
+
+.user-info {
+    flex-grow: 1;
+}
+
+.user-name {
+    font-weight: 700;
+    color: #000000;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.user-rank {
+    font-size: 12px;
+    color: #8b4513;
+    font-weight: 600;
+}
+
+.user-actions {
+    margin-left: 15px;
+}
+
+.btn-ethos {
+    background: #f5f5dc;
+    border: 2px solid #4A90E2;
+    color: #4A90E2;
+    padding: 6px 12px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    font-family: 'Times New Roman', serif;
+}
+
+.btn-ethos:hover {
+    background: #4A90E2;
+    color: #f5f5dc;
+}
+
+.no-missing-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    color: #8b4513;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .recap-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 15px 20px;
+    }
+    
+    .title-container h1 {
+        font-size: 1.5em;
+    }
+    
+    .header-logo {
+        height: 30px;
+    }
+    
+    .table-section {
+        margin: 15px;
+    }
+    
+    .leaderboard-table {
+        font-size: 12px;
+    }
+    
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 8px 10px;
+    }
+    
+    .btn-review-me {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
+/* ========== LOADING STATE ========== */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    color: #999999;
+    font-style: italic;
+    text-align: center;
+}
+
+
+/* ========== RESPONSIVE MOBILE UNIQUEMENT ========== */
+@media (max-width: 768px) {
+    .recap-container {
+        margin: 10px;
+    }
+    
+    .recap-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 15px 20px;
+    }
+    
+    .title-container h1 {
+        font-size: 1.5em;
+    }
+    
+    .header-logo {
+        height: 30px;
+    }
+    
+    .table-section {
+        margin: 15px;
+    }
+    
+    /* ========== TRANSFORMATION MOBILE DU TABLEAU ========== */
+    .table-container {
+        overflow: visible;
+    }
+    
+    .leaderboard-table {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .leaderboard-table, 
+    .leaderboard-table thead, 
+    .leaderboard-table tbody, 
+    .leaderboard-table th, 
+    .leaderboard-table td, 
+    .leaderboard-table tr {
+        display: block;
+    }
+    
+    .leaderboard-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .leaderboard-table tr {
+        background: #ffffff;
+        border: 2px solid #000000;
+        margin: 16px 0;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .leaderboard-table td {
+        border: none;
+        position: relative;
+        padding: 12px 0 12px 45%;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+    
+    .leaderboard-table td.user-cell {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px;
+        padding: 12px 0 12px 45%;
+    }
+    
+    .leaderboard-table td:before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        left: 0;
+        width: 40%;
+        text-align: left;
+        font-weight: 700;
+        color: #000000;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .leaderboard-table td.user-cell:before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        left: 0;
+        width: 40%;
+        text-align: left;
+        font-weight: 700;
+        color: #000000;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Boutons uniformes sur mobile */
+    .leaderboard-table td[data-label="Ethos"], 
+    .leaderboard-table td[data-label="X Profile"], 
+    .leaderboard-table td[data-label="Review Me Please"] {
+        justify-content: flex-start;
+    }
+    
+    .btn-review-me,
+    .ethos-link,
+    .twitter-link {
+        min-width: 100px;
+        height: 32px;
+        font-size: 10px;
+    }
+    
+    .user-name {
+        font-size: 14px;
+    }
+    
+    .img-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    /* ========== MODAL MOBILE ========== */
+    .modal-overlay {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .modal-header {
+        padding: 15px;
+    }
+    
+    .modal-header h2 {
+        font-size: 14px;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+    
+    .missing-review-item {
+        padding: 12px;
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .missing-review-item .avatar-small {
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    
+    .user-actions {
+        margin-left: 0;
+    }
+    
+    .btn-ethos {
+        font-size: 10px;
+        padding: 6px 12px;
+    }
+}
