@@ -108,7 +108,6 @@ body {
     filter: sepia(0) brightness(1.2);
 }
 
-
 /* Date section styling */
 .date-section {
     display: flex;
@@ -671,10 +670,11 @@ body {
 .header-logo {
     height: 40px;
     width: auto;
-    margin-left: 15px;
-    vertical-align: middle;
+    margin-left: 1px;
+    vertical-align: top;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
     transition: transform 0.3s ease;
+    transform: translateY(-12px);
 }
 
 .header-logo:hover {
