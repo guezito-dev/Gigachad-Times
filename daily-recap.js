@@ -969,6 +969,200 @@ async function renderRankChangesSection() {
         container.innerHTML = '<div class="empty-state">Error loading rank changes</div>';
     }
 }
+// ========== FONCTIONNALITÉ MISSING IDS ==========
+
+// Fonction pour afficher la modal Missing IDs
+async function showMissingIdsModal() {
+    const modal = document.getElementById('missingIdsModal');
+    const listContainer = document.getElementById('missingIdsList');
+    
+    // Afficher la modal
+    modal.style.display = 'flex';
+    
+    // Afficher le loading
+    listContainer.innerHTML = '<div class="loading">Loading missing IDs...</div>';
+    
+    try {
+        // Récupérer les données
+        const missingUsers = await fetchMissingIds();
+        
+        // Afficher les résultats avec le même style que Ranking System
+        renderMissingIdsSystem(missingUsers);
+        
+    } catch (error) {
+        console.error('Error loading missing IDs:', error);
+        listContainer.innerHTML = '<div class="error-state">❌ Error loading missing IDs</div>';
+    }
+}
+
+// Fonction pour fermer la modal
+function closeMissingIdsModal() {
+    const modal = document.getElementById('missingIdsModal');
+    modal.style.display = 'none';
+}
+
+// Fonction pour récupérer les utilisateurs sans ID
+async function fetchMissingIds() {
+    try {
+        debug('🔍 Fetching missing IDs...');
+        
+        // Récupérer les données Gigachads
+        const response = await fetch('https://raw.githubusercontent.com/guezito-dev/Ethos/main/gigachads-data.json');
+        if (!response.ok) throw new Error('Failed to fetch gigachads data');
+        
+        const data = await response.json();
+        const users = data.users || [];
+        
+        debug('📊 Total users:', users.length);
+        
+        // Filtrer les utilisateurs sans profileId
+        const missingIds = users.filter(user => {
+            const hasId = user.profileId && user.profileId !== null && user.profileId !== undefined;
+            return !hasId;
+        });
+        
+        debug('❌ Users without ID:', missingIds.length);
+        
+        return missingIds;
+        
+    } catch (error) {
+        debug('❌ Error fetching missing IDs:', error);
+        throw error;
+    }
+}
+
+// Fonction pour afficher avec le tableau simplifié
+// Version plus robuste avec plusieurs services de backup
+function renderMissingIdsSystem(missingUsers) {
+    const listContainer = document.getElementById('missingIdsList');
+    
+    if (missingUsers.length === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-check-circle" style="color: #4caf50; font-size: 2em; margin-bottom: 15px;"></i>
+                <p>✅ All Gigachads have profile IDs!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const html = missingUsers.map(user => {
+        const displayName = user.displayName || user.username || 'Unknown';
+        const username = user.username || 'no-username';
+        
+        // 🎯 NOUVEAU : Essayer plusieurs services pour récupérer l'avatar X
+        const avatarSources = [
+            `https://unavatar.io/x/${username}`,
+            `https://unavatar.io/twitter/${username}`,
+            user.avatarUrl || user.avatar || '',
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=667eea&color=fff&size=40`
+        ].filter(url => url !== '');
+        
+        return `
+            <tr>
+                <td class="simple-user-cell">
+                    <div class="simple-user-profile">
+                        <img src="${avatarSources[0]}" 
+                             alt="${displayName}" 
+                             class="simple-user-avatar"
+                             data-sources='${JSON.stringify(avatarSources)}'
+                             data-current-index="0"
+                             onerror="tryNextAvatarSource(this, '${displayName}')">
+                        <div class="simple-user-info">
+                            <div class="simple-user-name">${displayName}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="simple-action-cell">
+                    <a href="https://x.com/${username}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="simple-x-profile-link"
+                       title="View ${displayName}'s X profile">
+                        X Profile
+                    </a>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    listContainer.innerHTML = `
+        <div class="simple-missing-alert">
+            <strong>⚠️ Found ${missingUsers.length} users without profile ID</strong>
+        </div>
+        <table class="simple-missing-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>X Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${html}
+            </tbody>
+        </table>
+    `;
+    
+    debug('✅ Missing IDs list rendered:', missingUsers.length, 'users');
+}
+
+// Fonction pour essayer les sources d'avatar une par une
+function tryNextAvatarSource(img, displayName) {
+    if (img.dataset.errorHandled) return;
+    
+    const sources = JSON.parse(img.dataset.sources || '[]');
+    const currentIndex = parseInt(img.dataset.currentIndex || '0');
+    const nextIndex = currentIndex + 1;
+    
+    if (nextIndex < sources.length) {
+        img.dataset.currentIndex = nextIndex;
+        img.src = sources[nextIndex];
+        return;
+    }
+    
+    // Toutes les sources ont échoué, générer l'avatar SVG
+    img.dataset.errorHandled = 'true';
+    generateSvgAvatar(img, displayName);
+}
+
+
+function fixAvatarError(img, displayName) {
+    const firstLetter = displayName.charAt(0).toUpperCase();
+    const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    img.src = `data:image/svg+xml;base64,${btoa(`
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="${randomColor}"/>
+            <text x="20" y="28" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">${firstLetter}</text>
+        </svg>
+    `)}`;
+    
+    img.onerror = null; // Éviter les boucles infinies
+}
+
+// Ajouter cette fonction à la fin du fichier, avant la classe DailyRecapManager
+function initializeMissingIdsEvents() {
+    // Fermer la modal avec Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMissingIdsModal();
+        }
+    });
+
+    // Fermer la modal en cliquant à l'extérieur
+    document.addEventListener('click', (e) => {
+        const modal = document.getElementById('missingIdsModal');
+        if (e.target === modal) {
+            closeMissingIdsModal();
+        }
+    });
+
+    // Exposer les fonctions globalement
+    window.showMissingIdsModal = showMissingIdsModal;
+    window.closeMissingIdsModal = closeMissingIdsModal;
+}
+
 
 class DailyRecapManager {
     constructor() {
@@ -1216,10 +1410,13 @@ class DailyRecapManager {
     }
 }
 
+// Remplacer cette partie à la fin du fichier
 document.addEventListener('DOMContentLoaded', () => {
     debug('🚀 DOM loaded, initializing Daily Recap...');
     new DailyRecapManager();
+    initializeMissingIdsEvents(); // Ajouter cette ligne
 });
+
 
 function refreshData() {
     debug('🔄 Refreshing data...');
