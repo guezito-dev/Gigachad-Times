@@ -885,4 +885,503 @@ body {
         margin-left: 0;
     }
 }
+/* ========== BOUTONS DANS LE HEADER ========== */
+.right-section {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* ========== CORRECTION TAILLE BOUTONS HEADER ========== */
+.missing-ids-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px; /* Même padding que leaderboard-button */
+    background: #f5f5dc;
+    color: #8B4513;
+    border: 2px solid #8B4513;
+    border-radius: 0;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 14px; /* Même taille que leaderboard-button */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    height: auto; /* Même hauteur naturelle */
+}
+
+/* Effet journal ancien identique */
+.missing-ids-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 1px,
+        rgba(139, 69, 19, 0.1) 1px,
+        rgba(139, 69, 19, 0.1) 2px
+    );
+    pointer-events: none;
+}
+
+.missing-ids-button:hover {
+    background: #8B4513;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 3px 6px rgba(0,0,0,0.3);
+}
+
+.missing-ids-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.2),
+        0 1px 2px rgba(0,0,0,0.2);
+}
+
+.missing-ids-button .button-icon {
+    font-size: 16px; /* Même taille que leaderboard-button */
+    filter: sepia(1) hue-rotate(20deg);
+}
+/* ========== MODAL MISSING IDS SIMPLIFIÉE ========== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 0;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    background: #f8f9fa;
+    padding: 20px;
+    border-bottom: 2px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.3em;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 i {
+    color: #8B4513;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    background: #ff4444;
+    color: #fff;
+}
+
+.modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* ========== TABLEAU SIMPLIFIÉ POUR MISSING IDS ========== */
+.simple-missing-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #000;
+    background: #fff;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.9em;
+}
+
+.simple-missing-table th {
+    background: #f8f9fa;
+    border: 1px solid #000;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+.simple-missing-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    vertical-align: middle;
+    background: #fff;
+}
+
+.simple-missing-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.simple-missing-table tbody tr:hover {
+    background: #f0f8ff;
+    transition: background-color 0.2s ease;
+}
+
+.simple-user-cell {
+    min-width: 250px;
+}
+
+.simple-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.simple-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    background: #f0f0f0;
+    flex-shrink: 0;
+}
+.simple-user-avatar[src=""], 
+.simple-user-avatar:not([src]) {
+    background: #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Style pour les avatars par défaut */
+.simple-user-avatar::before {
+    content: attr(alt);
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.simple-user-info {
+    flex: 1;
+}
+
+.simple-user-name {
+    font-weight: bold;
+    color: #000;
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+
+.simple-action-cell {
+    text-align: center;
+    width: 80px;
+}
+
+/* ========== CORRECTION BOUTON X PROFILE ========== */
+.simple-x-profile-link {
+    background: #f5f5dc;
+    border: 2px solid #1DA1F2;
+    color: #1DA1F2;
+    padding: 8px 16px;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 36px;
+    font-family: 'Times New Roman', serif;
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        0 1px 2px rgba(0,0,0,0.2);
+    vertical-align: middle;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.simple-x-profile-link:hover {
+    background: #1DA1F2;
+    color: #f5f5dc;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2),
+        0 2px 4px rgba(0,0,0,0.3);
+}
+
+.simple-x-profile-link:active {
+    transform: translateY(0);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.2),
+        0 1px 2px rgba(0,0,0,0.2);
+}
+
+
+.simple-missing-alert {
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+/* Loading et Error states */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+}
+
+.error-state {
+    text-align: center;
+    padding: 40px;
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.empty-state i {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .right-section {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .missing-ids-button {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+        width: 95%;
+    }
+    
+    .simple-missing-table {
+        font-size: 0.8em;
+    }
+    
+    .simple-user-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .simple-x-profile-link {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2em;
+    }
+}
+/* ========== RESPONSIVE MOBILE POUR MISSING IDS ========== */
+@media (max-width: 768px) {
+    .recap-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .logo-container {
+        width: 100%;
+        order: 1;
+    }
+    
+    .center-section {
+        width: 100%;
+        order: 2;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .right-section {
+        width: 100%;
+        order: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* Bouton Missing IDs mobile - même taille que Gigachad Leaderboard */
+    .missing-ids-button {
+        width: 100%;
+        max-width: 300px;
+        padding: 12px 20px;
+        font-size: 14px;
+        text-align: center;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    /* Bouton Gigachad Leaderboard mobile pour comparaison */
+    .leaderboard-button {
+        width: 100%;
+        max-width: 300px;
+        padding: 12px 20px;
+        font-size: 14px;
+        text-align: center;
+        min-height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    /* Date mobile */
+    .date {
+        font-size: 12px;
+        padding: 8px 16px;
+        margin-top: 5px;
+    }
+    
+    /* Icônes boutons mobile */
+    .missing-ids-button .button-icon,
+    .leaderboard-button .button-icon {
+        font-size: 16px;
+    }
+    
+    /* Texte boutons mobile */
+    .missing-ids-button span,
+    .leaderboard-button span {
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* ========== RESPONSIVE TRÈS PETIT ÉCRAN ========== */
+@media (max-width: 480px) {
+    .missing-ids-button,
+    .leaderboard-button {
+        padding: 10px 16px;
+        font-size: 13px;
+        min-height: 42px;
+        max-width: 280px;
+    }
+    
+    .missing-ids-button .button-icon,
+    .leaderboard-button .button-icon {
+        font-size: 14px;
+    }
+    
+    .missing-ids-button span,
+    .leaderboard-button span {
+        font-size: 13px;
+    }
+    
+    .date {
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+}
+
+/* ========== RESPONSIVE TABLETTE ========== */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .recap-header {
+        padding: 20px;
+    }
+    
+    .missing-ids-button,
+    .leaderboard-button {
+        padding: 10px 18px;
+        font-size: 13px;
+        min-height: 40px;
+    }
+    
+    .missing-ids-button .button-icon,
+    .leaderboard-button .button-icon {
+        font-size: 15px;
+    }
+}
 
