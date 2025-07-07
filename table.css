@@ -799,3 +799,51 @@ body {
         padding: 6px 12px;
     }
 }
+
+
+/* Animation d'entrée subtile */
+.recap-container {
+    animation: gentleFlip 0.6s ease-out;
+}
+
+@keyframes gentleFlip {
+    0% {
+        transform: rotateY(30deg) translateX(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: rotateY(0deg) translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Effet bouton */
+.leaderboard-button {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.leaderboard-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.leaderboard-button:hover::before {
+    transform: translateX(100%);
+}
+
+.leaderboard-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+}
+
+.leaderboard-button:active {
+    transform: scale(0.95);
+}
