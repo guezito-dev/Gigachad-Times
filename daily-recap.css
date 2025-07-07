@@ -731,6 +731,28 @@ body {
 }
 
 
+@keyframes updateGlow {
+    0% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(0, 123, 255, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); }
+}
+
+.updated {
+    animation: updateGlow 1s ease-in-out;
+}
+
+/* Loading subtle */
+.loading {
+    opacity: 0.6;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+
 @media (max-width: 768px) {
     .header-logo {
         height: 30px;
@@ -789,4 +811,51 @@ body {
         width: 28px !important;
         height: 28px !important;
     }
+}
+
+/* Animation d'entrée subtile */
+.recap-container {
+    animation: gentleFlip 0.6s ease-out;
+}
+
+@keyframes gentleFlip {
+    0% {
+        transform: rotateY(30deg) translateX(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: rotateY(0deg) translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Effet bouton */
+.leaderboard-button {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.leaderboard-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.leaderboard-button:hover::before {
+    transform: translateX(100%);
+}
+
+.leaderboard-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+}
+
+.leaderboard-button:active {
+    transform: scale(0.95);
 }
