@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Giga Chad Times - Gigachad Leaderboard</title>
-    <link rel="stylesheet" href="../table.css">
+    <link rel="stylesheet" href="table.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="../gigachad.png">
-    <link rel="shortcut icon" type="image/png" href="../gigachad.png">
-    <link rel="apple-touch-icon" href="../gigachad.png">
+    <link rel="icon" type="image/png" href="gigachad.png">
+    <link rel="shortcut icon" type="image/png" href="gigachad.png">
+    <link rel="apple-touch-icon" href="gigachad.png">
 </head>
 <body>
     <div class="recap-container">
@@ -16,23 +16,61 @@
         <div class="recap-header">
             <div class="logo-container">
                 <div class="title-container">
-                    <h1>The Giga Chad Times <img src="../gigachad.png" alt="Giga Chad" class="header-logo"></h1>
+                    <h1>The Giga Chad Times <img src="./gigachad.png" alt="Giga Chad" class="header-logo"></h1>
                     <div class="subtitle">Gigachad Leaderboard</div>
                 </div>
             </div>
 
             <div class="center-section">
-                <a href="../" class="leaderboard-button">
+                <a href="index.html" class="leaderboard-button">
                     <i class="fas fa-arrow-left"></i>
                     Back to Daily Recap
                 </a>
             </div>
             
-            <div class="date">
-                <i class="fas fa-calendar"></i>
-                <span id="current-date">Loading...</span>
+            <!-- Date et Ranking System tout à droite -->
+    <div class="date-ranking-container">
+        <div class="date">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="current-date"></span>
+        </div>
+        
+        <div class="ranking-system-container">
+            <span class="ranking-system-text">
+                <i class="fas fa-trophy"></i>
+                Ranking System
+            </span>
+            <div class="ranking-tooltip">
+                <div class="tooltip-header">
+                    <i class="fas fa-calculator"></i>
+                    Point Calculation
+                </div>
+                <div class="tooltip-content">
+                    <div class="tooltip-line">
+                        <span class="action-type">Vouch Given:</span>
+                        <span class="points-value">10 points</span>
+                    </div>
+                    <div class="tooltip-line">
+                        <span class="action-type">Vouch Received:</span>
+                        <span class="points-value">5 points</span>
+                    </div>
+                    <div class="tooltip-line">
+                        <span class="action-type">Review Given:</span>
+                        <span class="points-value">2 points</span>
+                    </div>
+                    <div class="tooltip-line">
+                        <span class="action-type">Review Received:</span>
+                        <span class="points-value">1 point</span>
+                    </div>
+                </div>
+                <div class="tooltip-footer">
+                    <i class="fas fa-info-circle"></i>
+                    Higher activity = Higher rank
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
         <!-- Table Section -->
         <div class="table-section">
@@ -43,31 +81,31 @@
             <div class="table-container">
                 <table class="leaderboard-table">
                     <thead>
-    <tr>
-        <th class="sortable-cell" onclick="sortTable('rank')">
-            RANK <i class="fas fa-sort"></i>
-        </th>
-        <th>USER</th>
-        <th class="sortable-cell" onclick="sortTable('vouchesGiven')">
-            VOUCHES GIVEN <i class="fas fa-sort"></i>
-        </th>
-        <th class="sortable-cell" onclick="sortTable('reviewsGiven')">
-            REVIEWS GIVEN <i class="fas fa-sort"></i>
-        </th>
-        <th class="sortable-cell" onclick="sortTable('vouchesReceived')">
-            VOUCHES RECEIVED <i class="fas fa-sort"></i>
-        </th>
-        <th class="sortable-cell" onclick="sortTable('reviewsReceived')">
-            REVIEWS RECEIVED <i class="fas fa-sort"></i>
-        </th>
-        <th class="sortable-cell" onclick="sortTable('totalScore')">
-            TOTAL SCORE <i class="fas fa-sort"></i>
-        </th>
-        <th>ETHOS</th>
-        <th>X PROFILE</th>
-        <th>REVIEW ME PLEASE</th>
-    </tr>
-</thead>
+                        <tr>
+                            <th class="sortable-cell" onclick="sortTable('rank')">
+                                RANK <i class="fas fa-sort"></i>
+                            </th>
+                            <th>USER</th>
+                            <th class="sortable-cell" onclick="sortTable('vouchesGiven')">
+                                VOUCHES GIVEN <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable-cell" onclick="sortTable('reviewsGiven')">
+                                REVIEWS GIVEN <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable-cell" onclick="sortTable('vouchesReceived')">
+                                VOUCHES RECEIVED <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable-cell" onclick="sortTable('reviewsReceived')">
+                                REVIEWS RECEIVED <i class="fas fa-sort"></i>
+                            </th>
+                            <th class="sortable-cell" onclick="sortTable('totalScore')">
+                                TOTAL SCORE <i class="fas fa-sort"></i>
+                            </th>
+                            <th>ETHOS</th>
+                            <th>X PROFILE</th>
+                            <th>REVIEW ME PLEASE</th>
+                        </tr>
+                    </thead>
 
 
                     <tbody id="tableBody">
@@ -93,7 +131,8 @@
         </div>
     </div>
 
-    <script src="../table.js"></script>
+    <script src="table.js"></script>
+    <script src="transitions.js"></script>
     <script>
         // Initialiser la date
         document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
@@ -103,5 +142,6 @@
             day: 'numeric'
         });
     </script>
+    
 </body>
 </html>
