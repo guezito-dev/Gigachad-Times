@@ -330,6 +330,145 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ✨ TYPEWRITER GIGA CHAD - TABLE PAGE
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Typewriter Giga Chad chargé (TABLE PAGE)');
+    
+    // MASQUER IMMÉDIATEMENT les éléments
+    hideElementsForAnimation();
+    
+    // Démarrer l'animation rapidement
+    setTimeout(() => {
+        startGigaChadTypewriter();
+    }, 50);
+});
+
+function hideElementsForAnimation() {
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    if (title) {
+        title.style.opacity = '0';
+        title.style.visibility = 'hidden';
+        console.log('📝 Titre masqué pour préparation (TABLE)');
+    }
+    
+    if (subtitle) {
+        subtitle.style.opacity = '0';
+        subtitle.style.visibility = 'hidden';
+        console.log('📝 Sous-titre masqué pour préparation (TABLE)');
+    }
+}
+
+function startGigaChadTypewriter() {
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    if (!title) {
+        console.log('❌ Titre non trouvé (TABLE)');
+        return;
+    }
+    
+    console.log('📝 Démarrage animation Giga Chad (TABLE)...');
+    
+    // Sauvegarder l'image
+    const img = title.querySelector('img');
+    const imgHTML = img ? img.outerHTML : '';
+    
+    // Texte à animer
+    const titleText = 'The Giga Chad Times ';
+    
+    // Préparer le titre
+    title.textContent = '';
+    title.style.opacity = '1';
+    title.style.visibility = 'visible';
+    title.style.display = 'inline-block';
+    
+    // Ajouter la classe curseur
+    title.classList.add('typewriter-cursor');
+    
+    let i = 0;
+    const titleTimer = setInterval(() => {
+        if (i < titleText.length) {
+            title.textContent += titleText.charAt(i);
+            i++;
+        } else {
+            clearInterval(titleTimer);
+            
+            // Ajouter l'image
+            if (imgHTML) {
+                title.innerHTML += imgHTML;
+            }
+            
+            // Supprimer le curseur du titre
+            title.classList.remove('typewriter-cursor');
+            title.style.display = 'block';
+            
+            // Démarrer l'animation du sous-titre
+            setTimeout(() => {
+                animateGigaChadSubtitle(subtitle);
+            }, 300);
+        }
+    }, 80);
+}
+
+function animateGigaChadSubtitle(subtitle) {
+    if (!subtitle) {
+        console.log('✅ Animation terminée (pas de sous-titre) (TABLE)');
+        return;
+    }
+    
+    const originalText = subtitle.textContent;
+    
+    // Préparer le sous-titre
+    subtitle.textContent = '';
+    subtitle.style.opacity = '1';
+    subtitle.style.visibility = 'visible';
+    subtitle.style.display = 'block';
+    
+    // AJOUTER LA CLASSE CURSEUR SOUS-TITRE
+    subtitle.classList.add('typewriter-cursor-subtitle');
+    
+    let i = 0;
+    const subtitleTimer = setInterval(() => {
+        if (i < originalText.length) {
+            subtitle.textContent += originalText.charAt(i);
+            i++;
+        } else {
+            clearInterval(subtitleTimer);
+            
+            // SUPPRIMER LE CURSEUR après 1.5 secondes
+            setTimeout(() => {
+                subtitle.classList.remove('typewriter-cursor-subtitle');
+                console.log('✅ Animation Giga Chad terminée (TABLE) !');
+            }, 1500);
+        }
+    }, 60);
+}
+
+// Fonction pour redémarrer l'animation
+function restartGigaChadTypewriter() {
+    console.log('🔄 Redémarrage Giga Chad Typewriter (TABLE)...');
+    
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    // Nettoyer les classes
+    if (title) {
+        title.classList.remove('typewriter-cursor');
+    }
+    if (subtitle) {
+        subtitle.classList.remove('typewriter-cursor-subtitle');
+    }
+    
+    // Redémarrer
+    hideElementsForAnimation();
+    setTimeout(() => {
+        startGigaChadTypewriter();
+    }, 100);
+}
+
 
 // Exposer les fonctions globalement pour les événements onclick
 window.showMissingReviewsModal = showMissingReviewsModal;
