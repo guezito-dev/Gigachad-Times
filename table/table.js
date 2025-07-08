@@ -336,3 +336,129 @@ document.addEventListener('DOMContentLoaded', function() {
 window.showMissingReviewsModal = showMissingReviewsModal;
 window.closeModal = closeModal;
 window.sortTable = sortTable;
+
+// 🔍 SYSTÈME DE RECHERCHE
+let searchTimeout;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('userSearch');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchResults = document.getElementById('searchResults');
+    
+    // Événement de recherche avec debounce
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const query = this.value.trim();
+        
+        if (query.length === 0) {
+            hideSearchResults();
+            clearBtn.style.display = 'none';
+            removeHighlight();
+            return;
+        }
+        
+        clearBtn.style.display = 'block';
+        
+        // Debounce pour éviter trop de recherches
+        searchTimeout = setTimeout(() => {
+            performSearch(query);
+        }, 300);
+    });
+    
+    // Bouton clear
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        hideSearchResults();
+        clearBtn.style.display = 'none';
+        removeHighlight();
+    });
+    
+    // Fermer les résultats si on clique ailleurs
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-container')) {
+            hideSearchResults();
+        }
+    });
+});
+
+function performSearch(query) {
+    const results = rankingData.filter(user => 
+        user.user.displayName.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    displaySearchResults(results);
+}
+
+function displaySearchResults(results) {
+    const searchResults = document.getElementById('searchResults');
+    
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item">No users found</div>';
+        searchResults.style.display = 'block';
+        return;
+    }
+    
+    const html = results.slice(0, 5).map(user => `
+        <div class="search-result-item" onclick="selectUser('${user.user.displayName}')">
+            <img src="${user.user.avatarUrl}" alt="${user.user.displayName}" class="search-result-avatar"
+                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iNDAiIGZpbGw9IiNEOUQ5RDkiLz4KPC9zdmc+Cg=='" />
+            <div class="search-result-info">
+                <div class="search-result-name">${user.user.displayName}</div>
+                <div class="search-result-rank">Rank #${user.rank} • ${user.stats.totalScore} points</div>
+            </div>
+        </div>
+    `).join('');
+    
+    searchResults.innerHTML = html;
+    searchResults.style.display = 'block';
+}
+
+function selectUser(displayName) {
+    // Fermer les résultats
+    hideSearchResults();
+    
+    // Trouver la ligne dans le tableau
+    const tableRows = document.querySelectorAll('#tableBody tr');
+    let targetRow = null;
+    
+    tableRows.forEach(row => {
+        const userNameCell = row.querySelector('.user-name');
+        if (userNameCell && userNameCell.textContent.trim() === displayName) {
+            targetRow = row;
+        }
+    });
+    
+    if (targetRow) {
+        // Supprimer les anciens highlights
+        removeHighlight();
+        
+        // Ajouter le highlight
+        targetRow.classList.add('table-row-highlight');
+        
+        // Scroll vers la ligne
+        targetRow.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        // Supprimer le highlight après 3 secondes
+        setTimeout(() => {
+            targetRow.classList.remove('table-row-highlight');
+        }, 3000);
+    }
+}
+
+function hideSearchResults() {
+    const searchResults = document.getElementById('searchResults');
+    searchResults.style.display = 'none';
+}
+
+function removeHighlight() {
+    document.querySelectorAll('.table-row-highlight').forEach(row => {
+        row.classList.remove('table-row-highlight');
+    });
+}
+
+// Exposer les fonctions globalement
+window.selectUser = selectUser;
+
