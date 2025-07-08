@@ -1471,10 +1471,11 @@ body {
     display: flex !important;
     align-items: center !important;
     gap: 12px !important;
-    min-height: 60px !important;
-    max-height: 60px !important;
+    height: 60px !important;
+    overflow: hidden !important;
     box-sizing: border-box !important;
 }
+
 
 /* 🎯 CORRECTION SPÉCIFIQUE POUR RECENT VOUCHES */
 .section[data-section="vouches"] .activity-item,
@@ -1487,6 +1488,17 @@ body {
     max-height: 60px !important;
     padding: 12px !important;
 }
+
+/* 🎯 Style pour les montants ETH dans les vouches (violet foncé + bold + alignement) */
+.vouch-amount {
+    font-size: 12px !important;
+    color: #4A90E2 !important;  /* Violet plus prononcé */
+    font-weight: bold !important;
+    text-align: right !important;
+   padding-right: 0 !important;  /* Décalage à droite pour aligner avec l'horodatage */
+}
+
+
 
 /* 🎯 RÉORGANISATION DU CONTENU VOUCHES */
 .activity-item .vouch-content {
@@ -1519,14 +1531,7 @@ body {
     color: #666 !important;
 }
 
-/* 🎯 PLACEMENT ETH À CÔTÉ DE L'HORODATAGE */
-.activity-item .eth-amount {
-    font-size: 11px !important;
-    color: #8338ec !important;
-    font-weight: bold !important;
-    margin-left: 4px !important;
-    display: inline !important;
-}
+
 
 /* 🎯 ANIMATION VINTAGE JOURNAL - Plus en accord avec le style */
 .activity-item:hover,
