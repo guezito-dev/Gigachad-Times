@@ -1053,11 +1053,8 @@ body {
         display: inline-block;
     }
     
-    /* Afficher le tooltip au focus/active */
-    .ranking-system-container:focus-within .ranking-tooltip,
-    .ranking-system-container:active .ranking-tooltip,
-    .ranking-system-text:focus + .ranking-tooltip,
-    .ranking-system-text:active + .ranking-tooltip {
+    /* Afficher le tooltip avec une classe active */
+    .ranking-system-container.tooltip-active .ranking-tooltip {
         opacity: 1;
         visibility: visible;
         transform: translateX(-50%);
@@ -1066,13 +1063,13 @@ body {
     /* Positionner le tooltip juste en dessous du texte */
     .ranking-tooltip {
         position: absolute !important;
-        top: 100% !important; /* Juste en dessous du texte */
+        top: 100% !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         width: 90vw !important;
         max-width: 320px !important;
         z-index: 9999 !important;
-        margin-top: 8px !important; /* Petit espacement */
+        margin-top: 8px !important;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
         border: 2px solid #8B4513 !important;
     }
@@ -1085,7 +1082,7 @@ body {
     
     /* Garder le tooltip visible plus longtemps */
     .ranking-tooltip {
-        transition: all 0.3s ease 0.1s;
+        transition: all 0.3s ease;
     }
     
     /* Améliorer la lisibilité sur mobile */
@@ -1112,6 +1109,7 @@ body {
         font-size: 12px !important;
     }
 }
+
 
 /* ========== ANIMATION D'APPARITION ========== */
 @keyframes tooltipFadeIn {
