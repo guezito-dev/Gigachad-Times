@@ -1424,3 +1424,225 @@ body {
     }
 }
 
+/* 🎯 Animation RETRO WAVE - VERSION UNIFORMISÉE */
+.dashboard-card {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dashboard-card:hover {
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff);
+    background-size: 300% 300%;
+    animation: retro-wave 4s ease infinite;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes retro-wave {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🎯 UNIFORMISATION DE TOUTES LES LIGNES */
+.activity-item, 
+.leaderboard-item, 
+.gigachad-item,
+.invitation-item,
+.section .activity-list > div,
+.section .leaderboard-list > div,
+.section .invitation-list > div,
+.activity-list .activity-item,
+.leaderboard-list .leaderboard-item,
+.invitation-list .invitation-item {
+    transition: all 0.3s ease;
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+    border-radius: 8px !important;
+    background-color: #f8f8f8 !important;
+    border: 1px solid #e0e0e0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    box-sizing: border-box !important;
+}
+
+/* 🎯 CORRECTION SPÉCIFIQUE POUR RECENT VOUCHES */
+.section[data-section="vouches"] .activity-item,
+.section:has([data-section="vouches"]) .activity-item,
+.activity-item:has(.eth-amount) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    padding: 12px !important;
+}
+
+/* 🎯 RÉORGANISATION DU CONTENU VOUCHES */
+.activity-item .vouch-content {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex: 1 !important;
+}
+
+.activity-item .vouch-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    flex: 1 !important;
+}
+
+.activity-item .vouch-main {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+}
+
+.activity-item .vouch-meta {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 12px !important;
+    color: #666 !important;
+}
+
+/* 🎯 PLACEMENT ETH À CÔTÉ DE L'HORODATAGE */
+.activity-item .eth-amount {
+    font-size: 11px !important;
+    color: #8338ec !important;
+    font-weight: bold !important;
+    margin-left: 4px !important;
+    display: inline !important;
+}
+
+/* 🎯 ANIMATION VINTAGE JOURNAL - Plus en accord avec le style */
+.activity-item:hover,
+.leaderboard-item:hover,
+.gigachad-item:hover,
+.invitation-item:hover,
+.section .activity-list > div:hover,
+.section .leaderboard-list > div:hover,
+.section .invitation-list > div:hover,
+.activity-list .activity-item:hover,
+.leaderboard-list .leaderboard-item:hover,
+.invitation-list .invitation-item:hover {
+    background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%) !important;
+    border: 1px solid #d4af37 !important;
+    box-shadow: 
+        0 4px 8px rgba(139, 69, 19, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 0 1px rgba(212, 175, 55, 0.3) !important;
+    animation: vintage-highlight 3s ease-in-out infinite;
+    transform: translateY(-1px) !important;
+}
+
+@keyframes vintage-highlight {
+    0% { 
+        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
+        box-shadow: 
+            0 4px 8px rgba(139, 69, 19, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+    50% { 
+        background: linear-gradient(135deg, #f0ead6 0%, #e0d4b7 50%, #f0ead6 100%);
+        box-shadow: 
+            0 6px 12px rgba(139, 69, 19, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            0 0 0 1px rgba(212, 175, 55, 0.5);
+    }
+    100% { 
+        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
+        box-shadow: 
+            0 4px 8px rgba(139, 69, 19, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+}
+
+/* 🎯 AVATARS VINTAGE STYLE */
+.avatar {
+    transition: all 0.3s ease;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+}
+
+.activity-item:hover .avatar, 
+.leaderboard-item:hover .avatar, 
+.gigachad-item:hover .avatar,
+.invitation-item:hover .avatar,
+.section .activity-list > div:hover .avatar,
+.section .leaderboard-list > div:hover .avatar,
+.section .invitation-list > div:hover .avatar {
+    animation: vintage-avatar 2s ease-in-out infinite;
+    border: 2px solid #d4af37 !important;
+    box-shadow: 
+        0 0 0 3px rgba(212, 175, 55, 0.2),
+        0 2px 4px rgba(139, 69, 19, 0.3) !important;
+    filter: sepia(0.2) contrast(1.1) brightness(1.05) !important;
+}
+
+@keyframes vintage-avatar {
+    0% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 0 3px rgba(212, 175, 55, 0.2),
+            0 2px 4px rgba(139, 69, 19, 0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 
+            0 0 0 4px rgba(212, 175, 55, 0.3),
+            0 4px 8px rgba(139, 69, 19, 0.4);
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 0 3px rgba(212, 175, 55, 0.2),
+            0 2px 4px rgba(139, 69, 19, 0.3);
+    }
+}
+
+/* 🎯 TEXTE VINTAGE STYLE AU HOVER */
+.activity-item:hover .username,
+.leaderboard-item:hover .username,
+.gigachad-item:hover .username,
+.invitation-item:hover .username {
+    color: #8b4513 !important;
+    text-shadow: 1px 1px 2px rgba(212, 175, 55, 0.3) !important;
+    font-weight: bold !important;
+}
+
+.activity-item:hover .timestamp,
+.leaderboard-item:hover .timestamp,
+.gigachad-item:hover .timestamp,
+.invitation-item:hover .timestamp {
+    color: #a0522d !important;
+    text-shadow: 0.5px 0.5px 1px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* 🎯 TEXTE UNIFORME */
+.activity-item .username,
+.leaderboard-item .username,
+.gigachad-item .username,
+.invitation-item .username {
+    font-weight: bold !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+}
+
+.activity-item .timestamp,
+.leaderboard-item .timestamp,
+.gigachad-item .timestamp,
+.invitation-item .timestamp {
+    font-size: 12px !important;
+    color: #666 !important;
+}
