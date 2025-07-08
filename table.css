@@ -1043,15 +1043,14 @@ body {
     
     .ranking-system-container {
         align-self: center;
-        position: relative; /* Important pour le positionnement du tooltip */
+        position: relative;
     }
     
     .ranking-system-text {
-        /* Rendre l'élément focusable */
         outline: none;
         -webkit-tap-highlight-color: transparent;
         cursor: pointer;
-        display: inline-block; /* Pour que le span soit focusable */
+        display: inline-block;
     }
     
     /* Afficher le tooltip au focus/active */
@@ -1061,32 +1060,58 @@ body {
     .ranking-system-text:active + .ranking-tooltip {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateX(-50%);
     }
     
-    /* Positionner correctement */
+    /* Positionner le tooltip juste en dessous du texte */
     .ranking-tooltip {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        left: -100px;
-        width: 280px;
-        z-index: 9999;
-        margin-top: 10px;
-    }
-    
-    /* Garder le tooltip visible plus longtemps */
-    .ranking-tooltip {
-        transition: all 0.3s ease 0.1s; /* Délai pour éviter disparition trop rapide */
+        position: absolute !important;
+        top: 100% !important; /* Juste en dessous du texte */
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 90vw !important;
+        max-width: 320px !important;
+        z-index: 9999 !important;
+        margin-top: 8px !important; /* Petit espacement */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+        border: 2px solid #8B4513 !important;
     }
     
     /* Supprimer les flèches sur mobile */
     .ranking-tooltip::before,
     .ranking-tooltip::after {
-        display: none;
+        display: none !important;
+    }
+    
+    /* Garder le tooltip visible plus longtemps */
+    .ranking-tooltip {
+        transition: all 0.3s ease 0.1s;
+    }
+    
+    /* Améliorer la lisibilité sur mobile */
+    .ranking-tooltip {
+        font-size: 13px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .tooltip-header {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+    
+    .tooltip-content {
+        padding: 10px 12px !important;
+    }
+    
+    .tooltip-line {
+        margin-bottom: 8px !important;
+    }
+    
+    .tooltip-footer {
+        padding: 10px 12px !important;
+        font-size: 12px !important;
     }
 }
-
 
 /* ========== ANIMATION D'APPARITION ========== */
 @keyframes tooltipFadeIn {
