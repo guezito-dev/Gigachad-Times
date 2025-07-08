@@ -21,12 +21,26 @@
                 </div>
             </div>
 
-            <div class="center-section">
-                <a href="../" class="leaderboard-button">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Daily Recap
-                </a>
-            </div>
+            <!-- Dans le header, remplace la ligne avec le bouton BACK TO DAILY RECAP par : -->
+<div class="header-controls">
+    <a href="../" class="leaderboard-button">
+        <i class="fas fa-arrow-left"></i>
+        BACK TO DAILY RECAP
+    </a>
+    
+    <div class="search-container">
+        <div class="search-input-wrapper leaderboard-button">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="userSearch" placeholder="Search user..." class="search-input">
+            <button id="clearSearch" class="clear-search-btn" style="display: none;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+</div>
+
+
             
             <!-- Date et Ranking System tout à droite -->
     <div class="date-ranking-container">
