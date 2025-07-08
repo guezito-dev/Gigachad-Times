@@ -34,10 +34,49 @@
                     <span>Missing IDs</span>
                 </button>
                 
-                <div class="date">
-                    <i class="fas fa-calendar"></i>
-                    <span id="current-date">Loading...</span>
+                <!-- Dans le header, modifie la section date pour inclure le ranking system -->
+<div class="date-ranking-container">
+    <div class="date">
+        <i class="fas fa-calendar-alt"></i>
+        <span id="current-date"></span>
+    </div>
+    
+    <div class="ranking-system-container">
+        <span class="ranking-system-text" tabindex="0">
+            <i class="fas fa-trophy"></i>
+            Ranking System
+        </span>
+        <div class="ranking-tooltip">
+            <div class="tooltip-header">
+                <i class="fas fa-calculator"></i>
+                Point Calculation
+            </div>
+            <div class="tooltip-content">
+                <div class="tooltip-line">
+                    <span class="action-type">Vouch Given:</span>
+                    <span class="points-value">10 points</span>
                 </div>
+                <div class="tooltip-line">
+                    <span class="action-type">Vouch Received:</span>
+                    <span class="points-value">5 points</span>
+                </div>
+                <div class="tooltip-line">
+                    <span class="action-type">Review Given:</span>
+                    <span class="points-value">2 points</span>
+                </div>
+                <div class="tooltip-line">
+                    <span class="action-type">Review Received:</span>
+                    <span class="points-value">1 point</span>
+                </div>
+            </div>
+            <div class="tooltip-footer">
+                <i class="fas fa-info-circle"></i>
+                Higher activity = Higher rank
+            </div>
+        </div>
+    </div>
+</div>
+
             </div>
         </div>
 
