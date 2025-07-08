@@ -179,7 +179,7 @@ function renderVouchesSection(vouches) {
     const recentVouches = vouches.slice(0, 5);
     
     const html = recentVouches.map(vouch => {
-        // ✅ ADAPTATION POUR LES DONNÉES JSON
+        
                 const authorName = truncateNameAtSpace(vouch.authorUser?.displayName || vouch.authorUser?.username || 
                             vouch.author?.name || vouch.author?.username || 'Unknown');
                 const subjectName = truncateNameAtSpace(vouch.subjectUser?.displayName || vouch.subjectUser?.username || 
@@ -192,10 +192,10 @@ function renderVouchesSection(vouches) {
         const timestamp = vouch.timestamp || vouch.createdAt;
         const timeAgo = formatTimeAgo(timestamp);
         
-        // ✅ AMÉLIORER LA RÉCUPÉRATION DU MONTANT ETH
+        
         let stakeAmount = '0.000';
         
-        // Vérifier dans plusieurs endroits possibles
+        
         if (vouch.stakedAmount) {
             stakeAmount = vouch.stakedAmount;
         } else if (vouch.data?.stakedAmount) {
@@ -208,16 +208,16 @@ function renderVouchesSection(vouches) {
             stakeAmount = vouch.data.stake;
         }
         
-        // ✅ FONCTION POUR CONVERTIR WEI EN ETH (si nécessaire)
+        
         const formatEthAmount = (amount) => {
             if (!amount || amount === '0' || amount === 0) return '0.000';
             
-            // Si c'est déjà formaté avec ETH, le retourner
+            
             if (typeof amount === 'string' && (amount.includes('.') || amount.length < 10)) {
                 return amount;
             }
             
-            // Si c'est en Wei (très grand nombre), convertir
+            
             if (typeof amount === 'string' && amount.length > 10) {
                 try {
                     const wei = BigInt(amount);
@@ -288,7 +288,7 @@ function renderReviewsSection(reviews) {
     const recentReviews = reviews.slice(0, 5);
     
     const html = recentReviews.map(review => {
-        // ✅ ADAPTATION POUR LES DONNÉES JSON
+        
         const authorName = truncateNameAtSpace(review.authorUser?.displayName || review.authorUser?.username || 
                   review.author?.name || review.author?.username || 'Unknown');
         const subjectName = truncateNameAtSpace(review.subjectUser?.displayName || review.subjectUser?.username || 
