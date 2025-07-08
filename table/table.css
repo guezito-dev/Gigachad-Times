@@ -1043,24 +1043,73 @@ body {
     
     .ranking-system-container {
         align-self: center;
+        position: relative;
     }
     
+    .ranking-system-text {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        display: inline-block;
+    }
+    
+    /* Afficher le tooltip au focus/active */
+    .ranking-system-container:focus-within .ranking-tooltip,
+    .ranking-system-container:active .ranking-tooltip,
+    .ranking-system-text:focus + .ranking-tooltip,
+    .ranking-system-text:active + .ranking-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%);
+    }
+    
+    /* Positionner le tooltip juste en dessous du texte */
     .ranking-tooltip {
-        right: -10px;
-        left: -10px;
-        min-width: auto;
-        width: calc(100vw - 40px);
-        max-width: 300px;
+        position: absolute !important;
+        top: 100% !important; /* Juste en dessous du texte */
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 90vw !important;
+        max-width: 320px !important;
+        z-index: 9999 !important;
+        margin-top: 8px !important; /* Petit espacement */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+        border: 2px solid #8B4513 !important;
     }
     
-    .ranking-tooltip::before {
-        right: 50%;
-        transform: translateX(50%);
-    }
-    
+    /* Supprimer les flèches sur mobile */
+    .ranking-tooltip::before,
     .ranking-tooltip::after {
-        right: 50%;
-        transform: translateX(50%);
+        display: none !important;
+    }
+    
+    /* Garder le tooltip visible plus longtemps */
+    .ranking-tooltip {
+        transition: all 0.3s ease 0.1s;
+    }
+    
+    /* Améliorer la lisibilité sur mobile */
+    .ranking-tooltip {
+        font-size: 13px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .tooltip-header {
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+    
+    .tooltip-content {
+        padding: 10px 12px !important;
+    }
+    
+    .tooltip-line {
+        margin-bottom: 8px !important;
+    }
+    
+    .tooltip-footer {
+        padding: 10px 12px !important;
+        font-size: 12px !important;
     }
 }
 
@@ -1094,3 +1143,65 @@ body {
     color: #CD7F32 !important;
     font-weight: 900 !important;
 }
+
+/* ========== CORRECTION LOGO MOBILE ========== */
+@media (max-width: 768px) {
+    .header-logo {
+        height: 30px; /* Plus petit sur mobile */
+        transform: translateY(-8px); /* Moins décalé vers le haut */
+    }
+    
+    .title-container h1 {
+        font-size: 1.4em; /* Titre plus petit sur mobile */
+        align-items: flex-start; /* Alignement en haut */
+    }
+    
+    .logo-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    /* Alternative si le logo pose encore problème */
+    .header-logo {
+        height: 25px;
+        transform: translateY(-4px);
+        margin-left: 0;
+    }
+}
+
+/* ========== CORRECTION TOOLTIP MOBILE ========== */
+@media (max-width: 768px) {
+    /* Rendre le tooltip visible au tap sur mobile */
+    .ranking-system-container {
+        position: relative;
+        cursor: pointer;
+    }
+    
+    /* Tooltip toujours visible sur mobile lors du tap */
+    .ranking-system-container:active .ranking-tooltip,
+    .ranking-system-container:focus .ranking-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Positionner le tooltip correctement sur mobile */
+    .ranking-tooltip {
+        position: fixed; /* Important pour mobile */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        width: 90vw;
+        max-width: 320px;
+        z-index: 9999;
+    }
+    
+    /* Supprimer les flèches sur mobile */
+    .ranking-tooltip::before,
+    .ranking-tooltip::after {
+        display: none;
+    }
+}
+
