@@ -52,6 +52,11 @@ function renderHeader() {
     }
 }
 
+function truncateNameAtSpace(name) {
+    if (!name) return 'Unknown';
+    return name.split(' ')[0]; 
+}
+
 function updateCurrentDate() {
     const dateElement = document.getElementById('current-date');
     if (dateElement) {
@@ -175,10 +180,11 @@ function renderVouchesSection(vouches) {
     
     const html = recentVouches.map(vouch => {
         // ✅ ADAPTATION POUR LES DONNÉES JSON
-        const authorName = vouch.authorUser?.displayName || vouch.authorUser?.username || 
-                          vouch.author?.name || vouch.author?.username || 'Unknown';
-        const subjectName = vouch.subjectUser?.displayName || vouch.subjectUser?.username || 
-                           vouch.subject?.name || vouch.subject?.username || 'Unknown';
+                const authorName = truncateNameAtSpace(vouch.authorUser?.displayName || vouch.authorUser?.username || 
+                            vouch.author?.name || vouch.author?.username || 'Unknown');
+                const subjectName = truncateNameAtSpace(vouch.subjectUser?.displayName || vouch.subjectUser?.username || 
+                            vouch.subject?.name || vouch.subject?.username || 'Unknown');
+
         
         const authorAvatar = vouch.authorUser?.avatarUrl || vouch.author?.avatar || 'https://via.placeholder.com/32';
         const subjectAvatar = vouch.subjectUser?.avatarUrl || vouch.subject?.avatar || 'https://via.placeholder.com/32';
@@ -283,10 +289,11 @@ function renderReviewsSection(reviews) {
     
     const html = recentReviews.map(review => {
         // ✅ ADAPTATION POUR LES DONNÉES JSON
-        const authorName = review.authorUser?.displayName || review.authorUser?.username || 
-                          review.author?.name || review.author?.username || 'Unknown';
-        const subjectName = review.subjectUser?.displayName || review.subjectUser?.username || 
-                           review.subject?.name || review.subject?.username || 'Unknown';
+        const authorName = truncateNameAtSpace(review.authorUser?.displayName || review.authorUser?.username || 
+                  review.author?.name || review.author?.username || 'Unknown');
+        const subjectName = truncateNameAtSpace(review.subjectUser?.displayName || review.subjectUser?.username || 
+                   review.subject?.name || review.subject?.username || 'Unknown');
+
         
         const authorAvatar = review.authorUser?.avatarUrl || review.author?.avatar || 'https://via.placeholder.com/32';
         const subjectAvatar = review.subjectUser?.avatarUrl || review.subject?.avatar || 'https://via.placeholder.com/32';
