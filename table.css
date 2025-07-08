@@ -343,24 +343,6 @@ body {
     color: #000000;
 }
 
-.leaderboard-table tbody tr:nth-child(1) td[data-label="Rank"] {
-    color: #ffd700;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.leaderboard-table tbody tr:nth-child(2) td[data-label="Rank"] {
-    color: #c0c0c0;
-    font-size: 17px;
-    font-weight: 900;
-}
-
-.leaderboard-table tbody tr:nth-child(3) td[data-label="Rank"] {
-    color: #cd7f32;
-    font-size: 16px;
-    font-weight: 900;
-}
-
 /* ========== CONTENEUR DES BOUTONS ========== */
 .action-buttons {
     display: flex;
@@ -1061,26 +1043,50 @@ body {
     
     .ranking-system-container {
         align-self: center;
+        position: relative; /* Important pour le positionnement du tooltip */
     }
     
+    .ranking-system-text {
+        /* Rendre l'élément focusable */
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+        display: inline-block; /* Pour que le span soit focusable */
+    }
+    
+    /* Afficher le tooltip au focus/active */
+    .ranking-system-container:focus-within .ranking-tooltip,
+    .ranking-system-container:active .ranking-tooltip,
+    .ranking-system-text:focus + .ranking-tooltip,
+    .ranking-system-text:active + .ranking-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Positionner correctement */
     .ranking-tooltip {
-        right: -10px;
-        left: -10px;
-        min-width: auto;
-        width: calc(100vw - 40px);
-        max-width: 300px;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: -100px;
+        width: 280px;
+        z-index: 9999;
+        margin-top: 10px;
     }
     
-    .ranking-tooltip::before {
-        right: 50%;
-        transform: translateX(50%);
+    /* Garder le tooltip visible plus longtemps */
+    .ranking-tooltip {
+        transition: all 0.3s ease 0.1s; /* Délai pour éviter disparition trop rapide */
     }
     
+    /* Supprimer les flèches sur mobile */
+    .ranking-tooltip::before,
     .ranking-tooltip::after {
-        right: 50%;
-        transform: translateX(50%);
+        display: none;
     }
 }
+
 
 /* ========== ANIMATION D'APPARITION ========== */
 @keyframes tooltipFadeIn {
@@ -1096,6 +1102,21 @@ body {
 
 .ranking-system-container:hover .ranking-tooltip {
     animation: tooltipFadeIn 0.3s ease-out;
+}
+/* ========== RANGS COLORÉS SIMPLES ========== */
+.rank-gold {
+    color: #FFD700 !important;
+    font-weight: 900 !important;
+}
+
+.rank-silver {
+    color: #C0C0C0 !important;
+    font-weight: 900 !important;
+}
+
+.rank-bronze {
+    color: #CD7F32 !important;
+    font-weight: 900 !important;
 }
 
 /* ========== CORRECTION LOGO MOBILE ========== */
@@ -1158,3 +1179,4 @@ body {
         display: none;
     }
 }
+
