@@ -1203,3 +1203,93 @@ body {
     }
 }
 
+/* 🎯 ANIMATION VINTAGE JOURNAL POUR TABLEAU */
+.leaderboard-table tbody tr:hover {
+    background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%) !important;
+    border: 1px solid #d4af37 !important;
+    box-shadow: 
+        0 4px 8px rgba(139, 69, 19, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 0 1px rgba(212, 175, 55, 0.3) !important;
+    animation: vintage-highlight 3s ease-in-out infinite;
+    transform: translateY(-1px) !important;
+}
+
+@keyframes vintage-highlight {
+    0% { 
+        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
+        box-shadow: 
+            0 4px 8px rgba(139, 69, 19, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+    50% { 
+        background: linear-gradient(135deg, #f0ead6 0%, #e0d4b7 50%, #f0ead6 100%);
+        box-shadow: 
+            0 6px 12px rgba(139, 69, 19, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            0 0 0 1px rgba(212, 175, 55, 0.5);
+    }
+    100% { 
+        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
+        box-shadow: 
+            0 4px 8px rgba(139, 69, 19, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+}
+
+/* 🎯 AVATARS VINTAGE STYLE POUR TABLEAU */
+.leaderboard-table tbody tr:hover .img-avatar {
+    animation: vintage-avatar 2s ease-in-out infinite;
+    border: 2px solid #d4af37 !important;
+    box-shadow: 
+        0 0 0 3px rgba(212, 175, 55, 0.2),
+        0 2px 4px rgba(139, 69, 19, 0.3) !important;
+    filter: sepia(0.2) contrast(1.1) brightness(1.05) !important;
+}
+
+@keyframes vintage-avatar {
+    0% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 0 3px rgba(212, 175, 55, 0.2),
+            0 2px 4px rgba(139, 69, 19, 0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 
+            0 0 0 4px rgba(212, 175, 55, 0.3),
+            0 4px 8px rgba(139, 69, 19, 0.4);
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 0 3px rgba(212, 175, 55, 0.2),
+            0 2px 4px rgba(139, 69, 19, 0.3);
+    }
+}
+
+/* 🎯 TEXTE VINTAGE STYLE AU HOVER POUR TABLEAU */
+.leaderboard-table tbody tr:hover .user-name {
+    color: #8b4513 !important;
+    text-shadow: 1px 1px 2px rgba(212, 175, 55, 0.3) !important;
+    font-weight: bold !important;
+}
+
+/* 🎯 BOUTONS VINTAGE STYLE AU HOVER POUR TABLEAU */
+.leaderboard-table tbody tr:hover .btn-review-me,
+.leaderboard-table tbody tr:hover .ethos-link,
+.leaderboard-table tbody tr:hover .twitter-link {
+    border-color: #d4af37 !important;
+    color: #8b4513 !important;
+    background: rgba(212, 175, 55, 0.1) !important;
+    text-shadow: 0.5px 0.5px 1px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* 🎯 RANGS AVEC EFFET VINTAGE AU HOVER POUR TABLEAU */
+.leaderboard-table tbody tr:hover td[data-label="Rank"] {
+    color: #8b4513 !important;
+    text-shadow: 1px 1px 2px rgba(212, 175, 55, 0.3) !important;
+    font-weight: 900 !important;
+}
