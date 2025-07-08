@@ -893,32 +893,33 @@ body {
     align-items: center;
 }
 
-/* ========== CORRECTION TAILLE BOUTONS HEADER ========== */
+/* ========== CORRECTION EFFET VERT POUR MISSING IDS BUTTON ========== */
 .missing-ids-button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px; /* Même padding que leaderboard-button */
+    padding: 10px 20px;
     background: #f5f5dc;
     color: #8B4513;
     border: 2px solid #8B4513;
     border-radius: 0;
     font-family: 'Times New Roman', serif;
     font-weight: bold;
-    font-size: 14px; /* Même taille que leaderboard-button */
+    font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease; /* IMPORTANT pour l'effet */
     box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.5),
         0 2px 4px rgba(0,0,0,0.2);
     position: relative;
-    overflow: hidden;
-    height: auto; /* Même hauteur naturelle */
+    overflow: hidden; /* IMPORTANT pour l'effet de glissement */
+    height: auto;
+    text-decoration: none; /* Au cas où c'est un lien */
 }
 
-/* Effet journal ancien identique */
+/* Effet journal ancien - PREMIER pseudo-élément */
 .missing-ids-button::before {
     content: '';
     position: absolute;
@@ -934,27 +935,65 @@ body {
         rgba(139, 69, 19, 0.1) 2px
     );
     pointer-events: none;
+    z-index: 1;
 }
 
+/* EFFET VERT GLISSANT - DEUXIÈME pseudo-élément */
+.missing-ids-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Déclencher l'effet au hover */
+.missing-ids-button:hover::after {
+    transform: translateX(100%);
+}
+
+/* Effet hover principal */
 .missing-ids-button:hover {
     background: #8B4513;
     color: #f5f5dc;
-    transform: translateY(-1px);
-    box-shadow: 
-        inset 0 1px 0 rgba(255,255,255,0.2),
-        0 3px 6px rgba(0,0,0,0.3);
+    transform: translateY(-2px); /* MÊME effet que leaderboard */
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3); /* MÊME ombre verte */
 }
 
+/* Effet active */
 .missing-ids-button:active {
-    transform: translateY(0);
-    box-shadow: 
-        inset 0 2px 4px rgba(0,0,0,0.2),
-        0 1px 2px rgba(0,0,0,0.2);
+    transform: scale(0.95); /* MÊME effet que leaderboard */
 }
 
+/* Style de l'icône */
 .missing-ids-button .button-icon {
-    font-size: 16px; /* Même taille que leaderboard-button */
+    font-size: 16px;
     filter: sepia(1) hue-rotate(20deg);
+    position: relative;
+    z-index: 3; /* Au-dessus de tous les effets */
+}
+
+.missing-ids-button:hover .button-icon {
+    filter: sepia(0) brightness(1.2);
+}
+
+/* Style du texte */
+.missing-ids-button span {
+    position: relative;
+    z-index: 3; /* Au-dessus de tous les effets */
+}
+
+
+/* S'assurer que le texte reste au-dessus de l'effet */
+.missing-ids-button span {
+    position: relative;
+    z-index: 2;
 }
 /* ========== MODAL MISSING IDS SIMPLIFIÉE ========== */
 .modal-overlay {
