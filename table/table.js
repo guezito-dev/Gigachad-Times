@@ -294,6 +294,43 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Gestion du tooltip mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const rankingContainer = document.querySelector('.ranking-system-container');
+    const rankingText = document.querySelector('.ranking-system-text');
+    
+    if (rankingContainer && rankingText) {
+        // Fonction pour vérifier si on est sur mobile
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        // Toggle du tooltip au clic
+        rankingText.addEventListener('click', function(e) {
+            if (isMobile()) {
+                e.preventDefault();
+                e.stopPropagation();
+                rankingContainer.classList.toggle('tooltip-active');
+            }
+        });
+        
+        // Fermer le tooltip si on clique en dehors
+        document.addEventListener('click', function(e) {
+            if (isMobile() && !rankingContainer.contains(e.target)) {
+                rankingContainer.classList.remove('tooltip-active');
+            }
+        });
+        
+        // Fermer le tooltip au redimensionnement vers desktop
+        window.addEventListener('resize', function() {
+            if (!isMobile()) {
+                rankingContainer.classList.remove('tooltip-active');
+            }
+        });
+    }
+});
+
+
 // Exposer les fonctions globalement pour les événements onclick
 window.showMissingReviewsModal = showMissingReviewsModal;
 window.closeModal = closeModal;
