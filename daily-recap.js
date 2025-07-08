@@ -1126,6 +1126,7 @@ function tryNextAvatarSource(img, displayName) {
 }
 
 
+
 function fixAvatarError(img, displayName) {
     const firstLetter = displayName.charAt(0).toUpperCase();
     const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
@@ -1162,7 +1163,6 @@ function initializeMissingIdsEvents() {
     window.showMissingIdsModal = showMissingIdsModal;
     window.closeMissingIdsModal = closeMissingIdsModal;
 }
-
 
 class DailyRecapManager {
     constructor() {
@@ -1421,4 +1421,141 @@ document.addEventListener('DOMContentLoaded', () => {
 function refreshData() {
     debug('🔄 Refreshing data...');
     new DailyRecapManager();
+}
+
+// ✨ TYPEWRITER GIGA CHAD - CURSEUR PARFAIT
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 Typewriter Giga Chad chargé');
+    
+    // MASQUER IMMÉDIATEMENT les éléments
+    hideElementsForAnimation();
+    
+    // Démarrer l'animation rapidement
+    setTimeout(() => {
+        startGigaChadTypewriter();
+    }, 50);
+});
+
+function hideElementsForAnimation() {
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    if (title) {
+        title.style.opacity = '0';
+        title.style.visibility = 'hidden';
+        console.log('📝 Titre masqué pour préparation');
+    }
+    
+    if (subtitle) {
+        subtitle.style.opacity = '0';
+        subtitle.style.visibility = 'hidden';
+        console.log('📝 Sous-titre masqué pour préparation');
+    }
+}
+
+function startGigaChadTypewriter() {
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    if (!title) {
+        console.log('❌ Titre non trouvé');
+        return;
+    }
+    
+    console.log('📝 Démarrage animation Giga Chad...');
+    
+    // Sauvegarder l'image
+    const img = title.querySelector('img');
+    const imgHTML = img ? img.outerHTML : '';
+    
+    // Texte à animer
+    const titleText = 'The Giga Chad Times ';
+    
+    // Préparer le titre - VIDER ET AFFICHER
+    title.innerHTML = '';
+    title.style.opacity = '1';
+    title.style.visibility = 'visible';
+    title.style.display = 'block';
+    
+    // AJOUTER LA CLASSE CURSEUR
+    title.classList.add('typewriter-cursor');
+    
+    // Animation du titre
+    let i = 0;
+    const titleTimer = setInterval(() => {
+        if (i < titleText.length) {
+            title.textContent += titleText.charAt(i);
+            i++;
+        } else {
+            clearInterval(titleTimer);
+            
+            // SUPPRIMER LE CURSEUR et ajouter l'image
+            title.classList.remove('typewriter-cursor');
+            title.innerHTML = title.textContent + imgHTML;
+            
+            console.log('✅ Titre terminé, démarrage sous-titre...');
+            
+            // Démarrer sous-titre après 300ms
+            setTimeout(() => {
+                animateGigaChadSubtitle(subtitle);
+            }, 300);
+        }
+    }, 80);
+}
+
+function animateGigaChadSubtitle(subtitle) {
+    if (!subtitle) {
+        console.log('✅ Animation terminée (pas de sous-titre)');
+        return;
+    }
+    
+    const originalText = subtitle.textContent;
+    
+    // Préparer le sous-titre
+    subtitle.textContent = '';
+    subtitle.style.opacity = '1';
+    subtitle.style.visibility = 'visible';
+    subtitle.style.display = 'block';
+    
+    // AJOUTER LA CLASSE CURSEUR SOUS-TITRE
+    subtitle.classList.add('typewriter-cursor-subtitle');
+    
+    let i = 0;
+    const subtitleTimer = setInterval(() => {
+        if (i < originalText.length) {
+            subtitle.textContent += originalText.charAt(i);
+            i++;
+        } else {
+            clearInterval(subtitleTimer);
+            
+            // SUPPRIMER LE CURSEUR après 1.5 secondes
+            setTimeout(() => {
+                subtitle.classList.remove('typewriter-cursor-subtitle');
+                console.log('✅ Animation Giga Chad terminée !');
+            }, 1500);
+        }
+    }, 60);
+}
+
+// Fonction pour redémarrer l'animation
+function restartGigaChadTypewriter() {
+    console.log('🔄 Redémarrage Giga Chad Typewriter...');
+    
+    const title = document.querySelector('h1');
+    const subtitle = document.querySelector('.subtitle');
+    
+    // Nettoyer les classes
+    if (title) {
+        title.classList.remove('typewriter-cursor');
+    }
+    if (subtitle) {
+        subtitle.classList.remove('typewriter-cursor-subtitle');
+    }
+    
+    // Redémarrer
+    hideElementsForAnimation();
+    setTimeout(() => {
+        startGigaChadTypewriter();
+    }, 100);
 }
