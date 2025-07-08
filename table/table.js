@@ -1,12 +1,12 @@
 let rankingData = [];
 
-// Variable pour suivre l'état du tri
+
 let currentSort = {
     column: null,
-    direction: 'desc' // 'asc' ou 'desc'
+    direction: 'desc' 
 };
 
-// Récupération des données
+
 document.addEventListener('DOMContentLoaded', () => {
     fetch('https://raw.githubusercontent.com/guezito-dev/ethos/main/gigachads-ranking.json')
         .then(response => {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             rankingData = data.ranking;
-            // Tri initial par rang
+            
             currentSort = { column: 'rank', direction: 'asc' };
             renderTable(rankingData);
             updateSortArrows();
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-// Fonction pour calculer les gigachads qui n'ont pas encore été reviewés OU vouchés
+
 function getMissingReviews(currentUser, allUsers) {
     const reviewedAvatars = new Set();
     const vouchedAvatars = new Set();
@@ -39,7 +39,7 @@ function getMissingReviews(currentUser, allUsers) {
     console.log('Reviews given:', currentUser.stats.reviewsGivenAvatars);
     console.log('Vouches given:', currentUser.stats.vouchesGivenAvatars);
     
-    // Récupérer tous les avatars que ce gigachad a déjà reviewé
+    
     if (currentUser.stats.reviewsGivenAvatars && Array.isArray(currentUser.stats.reviewsGivenAvatars)) {
         currentUser.stats.reviewsGivenAvatars.forEach(review => {
             if (review.avatar) {
@@ -48,7 +48,7 @@ function getMissingReviews(currentUser, allUsers) {
         });
     }
     
-    // Récupérer tous les avatars que ce gigachad a déjà vouché
+   
     if (currentUser.stats.vouchesGivenAvatars && Array.isArray(currentUser.stats.vouchesGivenAvatars)) {
         currentUser.stats.vouchesGivenAvatars.forEach(vouch => {
             if (vouch.avatar) {
@@ -61,7 +61,7 @@ function getMissingReviews(currentUser, allUsers) {
     console.log('Vouched avatars:', Array.from(vouchedAvatars));
     console.log('=== ALL GIGACHADS AVATARS ===');
     
-    // Debug de la première entrée pour comprendre la structure
+    
     if (allUsers.length > 0) {
         console.log('🔍 FIRST USER STRUCTURE:', allUsers[0]);
         console.log('🔍 FIRST USER.USER:', allUsers[0].user);
@@ -69,9 +69,9 @@ function getMissingReviews(currentUser, allUsers) {
         console.log('🔍 ALL KEYS IN FIRST USER.USER:', Object.keys(allUsers[0].user));
     }
     
-    // Filtrer les gigachads qui n'ont pas encore été reviewés ET pas encore été vouchés
+    
     const missingReviews = allUsers.filter(user => {
-        // Utiliser displayName comme fallback si userkey n'existe pas
+        
         const currentUserID = currentUser.user.userkey || currentUser.user.displayName;
         const userID = user.user.userkey || user.user.displayName;
         
@@ -97,12 +97,12 @@ function getMissingReviews(currentUser, allUsers) {
     return missingReviews;
 }
 
-// Fonction pour afficher la modal avec les personnes manquantes
+
 function showMissingReviewsModal(userIndex) {
     const user = rankingData[userIndex];
     const missingReviews = getMissingReviews(user, rankingData);
     
-    // Créer la modal
+    
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
@@ -141,7 +141,7 @@ function showMissingReviewsModal(userIndex) {
     
     document.body.appendChild(modal);
     
-    // Ajouter l'événement pour fermer en cliquant sur l'overlay
+    
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeModal();
@@ -149,7 +149,7 @@ function showMissingReviewsModal(userIndex) {
     });
 }
 
-// Fonction pour fermer la modal
+
 function closeModal() {
     const modal = document.querySelector('.modal-overlay');
     if (modal) {
@@ -157,12 +157,12 @@ function closeModal() {
     }
 }
 
-// Fonction pour échapper les caractères spéciaux dans JSON
+
 function escapeJsonForHtml(obj) {
     return JSON.stringify(obj).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 }
 
-// Fonction pour afficher le tableau
+
 function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = '';
@@ -170,17 +170,17 @@ function renderTable(data) {
     data.forEach((user, index) => {
         const row = document.createElement('tr');
         
-        // Calculer les reviews manquantes
+        
         const missingReviews = getMissingReviews(user, data);
         const missingCount = missingReviews.length;
 
-        // Créer les attributs data de manière sécurisée
+       
         const vouchesGivenData = user.stats.vouchesGivenAvatars || [];
         const reviewsGivenData = user.stats.reviewsGivenAvatars || [];
         const vouchesReceivedData = user.stats.vouchesReceivedAvatars || [];
         const reviewsReceivedData = user.stats.reviewsReceivedAvatars || [];
 
-        // 🎯 CORRECTION : Utiliser UNIQUEMENT le rang original (user.rank)
+       
         let rankDisplay;
         
         if (user.rank === 1) {
@@ -190,7 +190,7 @@ function renderTable(data) {
         } else if (user.rank === 3) {
             rankDisplay = '<span class="rank-bronze">#3</span>';
         } else {
-            // Tous les autres rangs en noir
+            
             rankDisplay = '#' + user.rank;
         }
 
@@ -229,19 +229,19 @@ function renderTable(data) {
 }
 
 
-// Fonction de tri bidirectionnelle
+
 function sortTable(key) {
-    // Déterminer la direction du tri
+    
     if (currentSort.column === key) {
-        // Même colonne : inverser la direction
+        
         currentSort.direction = currentSort.direction === 'desc' ? 'asc' : 'desc';
     } else {
-        // Nouvelle colonne : commencer par descendant (sauf pour rank)
+        
         currentSort.column = key;
         currentSort.direction = key === 'rank' ? 'asc' : 'desc';
     }
 
-    // Effectuer le tri
+   
     rankingData.sort((a, b) => {
         let valueA, valueB;
         
@@ -253,29 +253,29 @@ function sortTable(key) {
             valueB = b.stats[key];
         }
         
-        // Appliquer la direction du tri
+        
         if (currentSort.direction === 'desc') {
-            return valueB - valueA; // Décroissant
+            return valueB - valueA; 
         } else {
-            return valueA - valueB; // Croissant
+            return valueA - valueB; 
         }
     });
     
-    // Mettre à jour l'affichage des flèches
+    
     updateSortArrows();
     
     renderTable(rankingData);
 }
 
-// Fonction pour mettre à jour les flèches de tri
+
 function updateSortArrows() {
-    // Réinitialiser toutes les flèches
+    
     document.querySelectorAll('.sortable-cell i').forEach(arrow => {
         arrow.className = 'fas fa-sort';
         arrow.style.opacity = '0.6';
     });
     
-    // Mettre à jour la flèche de la colonne active
+    
     const activeHeader = document.querySelector(`[onclick="sortTable('${currentSort.column}')"] i`);
     if (activeHeader) {
         activeHeader.style.opacity = '1';
@@ -287,25 +287,25 @@ function updateSortArrows() {
     }
 }
 
-// Fonction pour gérer la fermeture de la modal avec la touche Échap
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeModal();
     }
 });
 
-// Gestion du tooltip mobile
+
 document.addEventListener('DOMContentLoaded', function() {
     const rankingContainer = document.querySelector('.ranking-system-container');
     const rankingText = document.querySelector('.ranking-system-text');
     
     if (rankingContainer && rankingText) {
-        // Fonction pour vérifier si on est sur mobile
+       
         function isMobile() {
             return window.innerWidth <= 768;
         }
         
-        // Toggle du tooltip au clic
+        
         rankingText.addEventListener('click', function(e) {
             if (isMobile()) {
                 e.preventDefault();
@@ -314,14 +314,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Fermer le tooltip si on clique en dehors
+        
         document.addEventListener('click', function(e) {
             if (isMobile() && !rankingContainer.contains(e.target)) {
                 rankingContainer.classList.remove('tooltip-active');
             }
         });
         
-        // Fermer le tooltip au redimensionnement vers desktop
+       
         window.addEventListener('resize', function() {
             if (!isMobile()) {
                 rankingContainer.classList.remove('tooltip-active');
@@ -332,12 +332,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Exposer les fonctions globalement pour les événements onclick
+
 window.showMissingReviewsModal = showMissingReviewsModal;
 window.closeModal = closeModal;
 window.sortTable = sortTable;
 
-// 🔍 SYSTÈME DE RECHERCHE
+
 let searchTimeout;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearBtn = document.getElementById('clearSearch');
     const searchResults = document.getElementById('searchResults');
     
-    // Événement de recherche avec debounce
+    
     searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         const query = this.value.trim();
@@ -359,13 +359,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         clearBtn.style.display = 'block';
         
-        // Debounce pour éviter trop de recherches
+        
         searchTimeout = setTimeout(() => {
             performSearch(query);
         }, 300);
     });
     
-    // Bouton clear
+    
     clearBtn.addEventListener('click', function() {
         searchInput.value = '';
         hideSearchResults();
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
         removeHighlight();
     });
     
-    // Fermer les résultats si on clique ailleurs
+    
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.search-container')) {
             hideSearchResults();
@@ -414,10 +414,10 @@ function displaySearchResults(results) {
 }
 
 function selectUser(displayName) {
-    // Fermer les résultats
+    
     hideSearchResults();
     
-    // Trouver la ligne dans le tableau
+    
     const tableRows = document.querySelectorAll('#tableBody tr');
     let targetRow = null;
     
@@ -429,19 +429,19 @@ function selectUser(displayName) {
     });
     
     if (targetRow) {
-        // Supprimer les anciens highlights
+        
         removeHighlight();
         
-        // Ajouter le highlight
+        
         targetRow.classList.add('table-row-highlight');
         
-        // Scroll vers la ligne
+        
         targetRow.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center' 
         });
         
-        // Supprimer le highlight après 3 secondes
+        
         setTimeout(() => {
             targetRow.classList.remove('table-row-highlight');
         }, 3000);
@@ -459,6 +459,6 @@ function removeHighlight() {
     });
 }
 
-// Exposer les fonctions globalement
+
 window.selectUser = selectUser;
 
