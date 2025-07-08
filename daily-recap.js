@@ -36,6 +36,7 @@ class ActivitiesCache {
         });
     }
 }
+
 const activitiesCache = new ActivitiesCache();
 
 function debug(message, data = null) {
@@ -43,7 +44,6 @@ function debug(message, data = null) {
         console.log(`[DAILY-RECAP] ${message}`, data);
     }
 }
-
 
 function renderHeader() {
     const titleElement = document.querySelector('.title-container h1');
@@ -69,7 +69,6 @@ function updateCurrentDate() {
         debug('⚠️ #current-date element not found');
     }
 }
-
 
 function getAvatarUrl(profileId, username) {
     if (!profileId || !gigachadsData) {
@@ -204,95 +203,6 @@ async function loadGigachadsData() {
         throw error;
     }
 }
-
-async function loadGigachadsForInvitations() {
-    try {
-        debug('Loading Gigachads data for invitations...');
-        const response = await fetch('https://raw.githubusercontent.com/guezito-dev/Ethos/main/gigachads-data.json');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        debug('✅ Gigachads data for invitations loaded', { count: data.users?.length || 0 });
-        return data;
-    } catch (error) {
-        debug('❌ Error loading Gigachads data for invitations:', error);
-        return null;
-    }
-}
-
-async function loadInvitationsData() {
-    try {
-        debug('Loading ALL invitations data like Ethoscope...');
-        
-        let allProfilesWithInvites = [];
-        let offset = 0;
-        const limit = 100; 
-        let hasMore = true;
-        let totalFetched = 0;
-        
-        while (hasMore && totalFetched < 1000) { 
-            debug(`Fetching profiles batch - offset: ${offset}, limit: ${limit}`);
-            
-            
-            const apiUrl = `https://api.ethos.network/api/v1/profiles/directory?limit=${limit}&offset=${offset}&sortField=invitesAvailable`;
-            
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'Accept': 'application/json',
-                    'User-Agent': 'Mozilla/5.0 (compatible; EthosClient/1.0)'
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.ok && data.data.values) {
-                
-                const profilesWithInvites = data.data.values.filter(profile => 
-                    profile.invitesAvailable && profile.invitesAvailable >= 1
-                );
-                
-                allProfilesWithInvites = allProfilesWithInvites.concat(profilesWithInvites);
-                totalFetched += data.data.values.length;
-                
-                debug(`✅ Batch fetched: ${data.data.values.length} profiles, ${profilesWithInvites.length} with invites`);
-                
-                hasMore = data.data.values.length === limit && profilesWithInvites.length > 0;
-                offset += limit;
-                
-               
-                if (hasMore) {
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                }
-            } else {
-                debug('❌ Invalid response format');
-                hasMore = false;
-            }
-        }
-        
-        debug('✅ All invitations data loaded', { 
-            totalProfilesWithInvites: allProfilesWithInvites.length,
-            totalInvites: allProfilesWithInvites.reduce((sum, p) => sum + (p.invitesAvailable || 0), 0)
-        });
-        
-        
-        const guezito = allProfilesWithInvites.find(p => p.actor?.profileId === 14905);
-        debug('🔍 Guezito profile found:', guezito ? {
-            name: guezito.actor?.displayName || guezito.actor?.username,
-            profileId: guezito.actor?.profileId,
-            invites: guezito.invitesAvailable
-        } : 'Not found in profiles with invites');
-        
-        return allProfilesWithInvites;
-        
-    } catch (error) {
-        debug('❌ Error loading invitations data:', error);
-        return [];
-    }
-}
-
 
 async function fetchRecentActivities() {
     debug('Starting activities fetch...');
@@ -573,103 +483,51 @@ async function renderInvitationsSection() {
     const countElement = document.querySelector('#invitations-section .count-badge');
     
     try {
-        debug('🔄 Loading invitations data...');
+        debug('🔄 Loading invitations data from JSON...');
         
-        const [gigachadsData, allProfilesWithInvites] = await Promise.all([
-            loadGigachadsForInvitations(),
-            loadInvitationsData()
-        ]);
         
-        if (!gigachadsData || !allProfilesWithInvites || allProfilesWithInvites.length === 0) {
+        const response = await fetch('https://raw.githubusercontent.com/guezito-dev/Ethos/main/invitations-data.json');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const jsonData = await response.json();
+        
+        if (!jsonData || !jsonData.data || jsonData.data.length === 0) {
             container.innerHTML = '<div class="empty-state">No invitation data available</div>';
             return;
         }
         
-        
-        const gigachadProfileIds = new Set(
-            gigachadsData.users
-                .filter(user => user.profileId !== null && user.profileId !== undefined)
-                .map(user => user.profileId)
-        );
-        
-        debug('📊 Gigachads found:', gigachadProfileIds.size);
-        
-        
-        const seenProfileIds = new Set();
-        const seenUsernames = new Set(); 
-        
-        const gigachadsWithInvites = allProfilesWithInvites
-            .filter(profile => {
-                const profileId = profile.actor?.profileId;
-                const username = profile.actor?.name?.toLowerCase();
-                
-                
-                if (!profileId || !gigachadProfileIds.has(profileId) || profile.invitesAvailable < 1) {
-                    return false;
-                }
-                
-                
-                if (seenProfileIds.has(profileId) || seenUsernames.has(username)) {
-                    debug(`🔄 Duplicate found - ProfileId: ${profileId}, Username: ${username}`);
-                    return false;
-                }
-                
-                seenProfileIds.add(profileId);
-                seenUsernames.add(username);
-                return true;
-            })
-            .sort((a, b) => b.invitesAvailable - a.invitesAvailable)
-            .slice(0, 5); 
-        
-        debug('✅ Unique Gigachads with invites found:', gigachadsWithInvites.length);
-        
-        
-        gigachadsWithInvites.forEach((profile, index) => {
-            const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
-            debug(`${index + 1}. ProfileId: ${profile.actor.profileId}, Username: ${gigachad?.username || profile.actor?.name}, Invites: ${profile.invitesAvailable}`);
+        debug('✅ Invitations JSON loaded:', {
+            gigachadsWithInvites: jsonData.gigachadsWithInvites,
+            totalInvites: jsonData.totalInvites,
+            lastUpdated: jsonData.lastUpdated
         });
         
         
         if (countElement) {
-            countElement.textContent = gigachadsWithInvites.length;
-        }
-        
-        if (gigachadsWithInvites.length === 0) {
-            container.innerHTML = '<div class="empty-state">No Gigachads with invitations found</div>';
-            return;
+            countElement.textContent = jsonData.data.length;
         }
         
        
-        const html = gigachadsWithInvites.map(profile => {
-            const gigachad = gigachadsData.users.find(user => user.profileId === profile.actor.profileId);
-            
-            const displayName = gigachad?.displayName || profile.actor?.name || 'Unknown';
-            const avatarUrl = gigachad?.avatarUrl || profile.actor?.avatar || 'https://via.placeholder.com/35';
-            const inviteCount = profile.invitesAvailable || 0;
-            const username = gigachad?.username || profile.actor?.name || displayName;
-            
-            
-            const xUrl = `https://x.com/${username}`;
-            
+        const html = jsonData.data.map(gigachad => {
             return `
-                <div class="leaderboard-item clickable" onclick="window.open('${xUrl}', '_blank')">
+                <div class="leaderboard-item clickable" onclick="window.open('${gigachad.xUrl}', '_blank')">
                     <div class="rank">🎫</div>
-                    <img src="${avatarUrl}" alt="${displayName}" class="avatar" 
+                    <img src="${gigachad.avatarUrl}" alt="${gigachad.displayName}" class="avatar" 
                          onerror="this.src='https://via.placeholder.com/35'">
                     <div class="user-info">
-                        <div class="user-name">${displayName}</div>
-                        <div class="user-score">${inviteCount} invite${inviteCount > 1 ? 's' : ''}</div>
+                        <div class="user-name">${gigachad.displayName}</div>
+                        <div class="user-score">${gigachad.inviteText}</div>
                     </div>
                 </div>
             `;
         }).join('');
         
         container.innerHTML = html;
-        debug(`✅ Rendered ${gigachadsWithInvites.length} unique Gigachads with invitations`);
+        debug(`✅ Rendered ${jsonData.data.length} Gigachads with invitations (from JSON)`);
         return html;
         
     } catch (error) {
-        debug('❌ Error rendering invitations section:', error);
+        debug('❌ Error loading invitations JSON:', error);
         container.innerHTML = '<div class="empty-state">Error loading invitations</div>';
     }
 }
@@ -680,13 +538,15 @@ async function renderNewGigachadsSection() {
     try {
         debug('🔄 Loading new gigachads data...');
         
-        const gigachadsData = await loadGigachadsForInvitations();
+       
+        const response = await fetch('https://raw.githubusercontent.com/guezito-dev/Ethos/main/gigachads-data.json');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const gigachadsData = await response.json();
         
         if (!gigachadsData || !gigachadsData.users || gigachadsData.users.length === 0) {
             container.innerHTML = '<div class="empty-state">No Gigachads data available</div>';
             return;
         }
-        
         
         const recentGigachads = gigachadsData.users
             .filter(user => user.profileId) 
@@ -699,7 +559,6 @@ async function renderNewGigachadsSection() {
             container.innerHTML = '<div class="empty-state">No recent Gigachads found</div>';
             return;
         }
-        
         
         const profileIds = recentGigachads.map(g => g.profileId);
         
@@ -728,7 +587,6 @@ async function renderNewGigachadsSection() {
                 throw new Error('Invalid profiles data structure');
             }
             
-            
             const gigachadsWithRealDates = recentGigachads.map(gigachad => {
                 const profileData = profilesData.data.values.find(p => p.id === gigachad.profileId);
                 if (profileData && profileData.createdAt) {
@@ -740,7 +598,6 @@ async function renderNewGigachadsSection() {
                 return null;
             }).filter(Boolean); 
             
-            
             const sortedGigachads = gigachadsWithRealDates
                 .sort((a, b) => b.realCreatedAt - a.realCreatedAt)
                 .slice(0, 5); 
@@ -751,7 +608,6 @@ async function renderNewGigachadsSection() {
                 container.innerHTML = '<div class="empty-state">No Gigachads with valid dates found</div>';
                 return;
             }
-            
             
             const getTimeAgo = (timestamp) => {
                 const now = Date.now();
@@ -772,13 +628,11 @@ async function renderNewGigachadsSection() {
                 }
             };
             
-            
             const html = sortedGigachads.map(gigachad => {
                 const displayName = gigachad.displayName || gigachad.username || 'Unknown';
                 const avatarUrl = gigachad.avatarUrl || 'https://via.placeholder.com/35';
                 const timeAgo = getTimeAgo(gigachad.realCreatedAt);
                 const username = gigachad.username || displayName;
-                
                 
                 const profileUrl = `https://app.ethos.network/profile/x/${username}`;
                 
@@ -969,24 +823,22 @@ async function renderRankChangesSection() {
         container.innerHTML = '<div class="empty-state">Error loading rank changes</div>';
     }
 }
-// ========== FONCTIONNALITÉ MISSING IDS ==========
 
-// Fonction pour afficher la modal Missing IDs
 async function showMissingIdsModal() {
     const modal = document.getElementById('missingIdsModal');
     const listContainer = document.getElementById('missingIdsList');
     
-    // Afficher la modal
+    
     modal.style.display = 'flex';
     
-    // Afficher le loading
+   
     listContainer.innerHTML = '<div class="loading">Loading missing IDs...</div>';
     
     try {
-        // Récupérer les données
+        
         const missingUsers = await fetchMissingIds();
         
-        // Afficher les résultats avec le même style que Ranking System
+        
         renderMissingIdsSystem(missingUsers);
         
     } catch (error) {
@@ -995,18 +847,16 @@ async function showMissingIdsModal() {
     }
 }
 
-// Fonction pour fermer la modal
 function closeMissingIdsModal() {
     const modal = document.getElementById('missingIdsModal');
     modal.style.display = 'none';
 }
 
-// Fonction pour récupérer les utilisateurs sans ID
 async function fetchMissingIds() {
     try {
         debug('🔍 Fetching missing IDs...');
         
-        // Récupérer les données Gigachads
+        
         const response = await fetch('https://raw.githubusercontent.com/guezito-dev/Ethos/main/gigachads-data.json');
         if (!response.ok) throw new Error('Failed to fetch gigachads data');
         
@@ -1015,7 +865,7 @@ async function fetchMissingIds() {
         
         debug('📊 Total users:', users.length);
         
-        // Filtrer les utilisateurs sans profileId
+        
         const missingIds = users.filter(user => {
             const hasId = user.profileId && user.profileId !== null && user.profileId !== undefined;
             return !hasId;
@@ -1031,8 +881,6 @@ async function fetchMissingIds() {
     }
 }
 
-// Fonction pour afficher avec le tableau simplifié
-// Version plus robuste avec plusieurs services de backup
 function renderMissingIdsSystem(missingUsers) {
     const listContainer = document.getElementById('missingIdsList');
     
@@ -1050,7 +898,7 @@ function renderMissingIdsSystem(missingUsers) {
         const displayName = user.displayName || user.username || 'Unknown';
         const username = user.username || 'no-username';
         
-        // 🎯 NOUVEAU : Essayer plusieurs services pour récupérer l'avatar X
+        
         const avatarSources = [
             `https://unavatar.io/x/${username}`,
             `https://unavatar.io/twitter/${username}`,
@@ -1106,7 +954,6 @@ function renderMissingIdsSystem(missingUsers) {
     debug('✅ Missing IDs list rendered:', missingUsers.length, 'users');
 }
 
-// Fonction pour essayer les sources d'avatar une par une
 function tryNextAvatarSource(img, displayName) {
     if (img.dataset.errorHandled) return;
     
@@ -1120,12 +967,10 @@ function tryNextAvatarSource(img, displayName) {
         return;
     }
     
-    // Toutes les sources ont échoué, générer l'avatar SVG
+    
     img.dataset.errorHandled = 'true';
     generateSvgAvatar(img, displayName);
 }
-
-
 
 function fixAvatarError(img, displayName) {
     const firstLetter = displayName.charAt(0).toUpperCase();
@@ -1139,19 +984,18 @@ function fixAvatarError(img, displayName) {
         </svg>
     `)}`;
     
-    img.onerror = null; // Éviter les boucles infinies
+    img.onerror = null; 
 }
 
-// Ajouter cette fonction à la fin du fichier, avant la classe DailyRecapManager
 function initializeMissingIdsEvents() {
-    // Fermer la modal avec Escape
+    
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeMissingIdsModal();
         }
     });
 
-    // Fermer la modal en cliquant à l'extérieur
+    
     document.addEventListener('click', (e) => {
         const modal = document.getElementById('missingIdsModal');
         if (e.target === modal) {
@@ -1159,16 +1003,16 @@ function initializeMissingIdsEvents() {
         }
     });
 
-    // Exposer les fonctions globalement
+    
     window.showMissingIdsModal = showMissingIdsModal;
     window.closeMissingIdsModal = closeMissingIdsModal;
 }
 
 class DailyRecapManager {
     constructor() {
-        this.cache = new Map(); // Garde pour le cache temporaire
-        this.cacheExpiry = 5 * 60 * 1000; // 5 minutes
-        this.clearExpiredCache(); // Nettoie le cache expiré au démarrage
+        this.cache = new Map(); 
+        this.cacheExpiry = 5 * 60 * 1000; 
+        this.clearExpiredCache(); 
         this.init();
     }
 
@@ -1177,10 +1021,10 @@ class DailyRecapManager {
         try {
             debug('🚀 Daily Recap initialization...');
             
-            // 1. Afficher le cache immédiatement
+           
             await this.loadFromCache();
             
-            // 2. Puis charger les nouvelles données en arrière-plan
+            
             this.loadFreshDataInBackground();
             
             this.updateCurrentDate();
@@ -1191,7 +1035,7 @@ class DailyRecapManager {
         }
     }
 
-    // 📦 Charger depuis le cache
+   
     async loadFromCache() {
         debug('📦 Loading from cache...');
         this.renderHeader();
@@ -1220,7 +1064,7 @@ class DailyRecapManager {
         }
     }
 
-    // 🔄 Charger les données fraîches en arrière-plan
+    
     async loadFreshDataInBackground() {
         debug('🔄 Loading fresh data in background...');
         
@@ -1232,7 +1076,7 @@ class DailyRecapManager {
         }
     }
 
-    // 💾 Sauvegarder dans le cache
+    
     saveToCache(key, html) {
     const cacheData = {
         html: html,
@@ -1247,7 +1091,7 @@ class DailyRecapManager {
     }
     }
 
-    // 📦 Récupérer depuis le cache
+ 
     getFromCache(key) {
     try {
         const cached = localStorage.getItem(`daily-recap-cache-${key}`);
@@ -1257,7 +1101,7 @@ class DailyRecapManager {
                 debug(`✅ ${key} loaded from localStorage cache`);
                 return cacheData.html;
             } else {
-                // Cache expiré, le supprimer
+               
                 localStorage.removeItem(`daily-recap-cache-${key}`);
                 debug(`🗑️ ${key} cache expired and removed`);
             }
@@ -1289,7 +1133,7 @@ class DailyRecapManager {
             });
         }
 
-    // 🔄 Afficher le contenu en cache pour une section
+   
     renderCachedSection(sectionName, cachedHtml) {
         const element = document.getElementById(`${sectionName}-list`);
         if (element) {
@@ -1298,7 +1142,7 @@ class DailyRecapManager {
         }
     }
 
-    // ⏳ Afficher le loading pour une section spécifique
+    
     showLoadingForSection(sectionName) {
         const element = document.getElementById(`${sectionName}-list`);
         if (element) {
@@ -1322,10 +1166,10 @@ class DailyRecapManager {
     async renderAllSectionsWithCache() {
         debug('📊 Rendering all sections with cache...');
         
-        // 1. Fetch activities
+      
         const { vouches, reviews } = await fetchRecentActivities();
         
-        // 2. Render sections rapides avec la même logique que les autres
+        
         const vouchesHtml = renderVouchesSection(vouches);
         this.updateSectionAndCache('vouches', vouchesHtml);
         
@@ -1335,7 +1179,7 @@ class DailyRecapManager {
         const leaderboardHtml = renderLeaderboardSection();
         this.updateSectionAndCache('leaderboard', leaderboardHtml);
         
-        // 3. Sections plus lentes avec return (inchangé)
+       
         const newGigachadsHtml = await renderNewGigachadsSection();
         this.updateSectionAndCache('new-gigachads', newGigachadsHtml);
         
@@ -1349,22 +1193,22 @@ class DailyRecapManager {
     }
 
 
-    // 📊 Rendu initial (sans cache)
+    
     async renderAllSections() {
         debug('📊 Rendering all sections...');
         
-        // 1. Render header
+        
         this.renderHeader();
         
-        // 2. Fetch activities
+        
         const { vouches, reviews } = await fetchRecentActivities();
         
-        // 3. Render sections rapides
+        
         renderVouchesSection(vouches);
         renderReviewsSection(reviews);
         renderLeaderboardSection();
         
-        // 4. Render sections lentes
+       
         await renderNewGigachadsSection();
         await renderRankChangesSection();
         await renderInvitationsSection();
@@ -1372,7 +1216,7 @@ class DailyRecapManager {
         debug('✅ All sections rendered');
     }
 
-    // 🔄 Mettre à jour section et cache
+    
     updateSectionAndCache(sectionName, newHtml) {
         const element = document.getElementById(`${sectionName}-list`);
         if (element && newHtml) {
@@ -1410,16 +1254,13 @@ class DailyRecapManager {
     }
 }
 
-// Remplacer cette partie à la fin du fichier
 document.addEventListener('DOMContentLoaded', () => {
     debug('🚀 DOM loaded, initializing Daily Recap...');
     new DailyRecapManager();
-    initializeMissingIdsEvents(); // Ajouter cette ligne
+    initializeMissingIdsEvents();
 });
-
 
 function refreshData() {
     debug('🔄 Refreshing data...');
     new DailyRecapManager();
 }
-
