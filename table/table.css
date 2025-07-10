@@ -5,6 +5,44 @@
     box-sizing: border-box;
 }
 
+/* ========== PROTECTION ANTI-CRASH MOBILE ========== */
+@media (max-width: 768px) {
+    /* Désactive TOUTES les animations sur mobile */
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.1s !important;
+        animation-delay: 0s !important;
+    }
+    
+    /* Force l'arrêt des animations dangereuses */
+    .recap-container,
+    .leaderboard-table tbody tr,
+    .leaderboard-table tbody tr:hover,
+    .leaderboard-table tbody tr:hover .img-avatar {
+        animation: none !important;
+    }
+    
+    /* Supprime les filtres lourds */
+    .header-logo,
+    .img-avatar,
+    .leaderboard-table tbody tr:hover .img-avatar {
+        filter: none !important;
+    }
+    
+    /* Transitions ultra-rapides */
+    .leaderboard-button,
+    .leaderboard-table tbody tr {
+        transition: background-color 0.1s ease !important;
+    }
+    
+    /* Supprime les pseudo-éléments complexes */
+    .leaderboard-button::before {
+        display: none !important;
+    }
+}
+
+
 body {
     font-family: Georgia, 'Times New Roman', serif;
     background-color: #f5f5dc;
