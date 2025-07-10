@@ -5,6 +5,31 @@
     box-sizing: border-box;
 }
 
+/* ========== PROTECTION ANTI-CRASH MOBILE ========== */
+@media (max-width: 768px) {
+    /* Désactive TOUTES les animations sur mobile */
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.1s !important;
+        animation-delay: 0s !important;
+    }
+    
+    /* Force l'arrêt des animations infinies */
+    .skeleton-item, .skeleton-avatar, .skeleton-line,
+    .loading, .updated, .recap-container,
+    .activity-item, .leaderboard-item, .invitation-item {
+        animation: none !important;
+    }
+    
+    /* Transitions mobiles ultra-rapides */
+    .leaderboard-button, .missing-ids-button,
+    .activity-item, .leaderboard-item {
+        transition: background-color 0.1s ease !important;
+    }
+}
+
+
 body {
     font-family: Georgia, 'Times New Roman', serif;
     background-color: #f5f5dc;
@@ -56,7 +81,7 @@ body {
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
     box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.5),
         0 2px 4px rgba(0,0,0,0.2);
@@ -916,7 +941,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.2s ease; /* IMPORTANT pour l'effet */
+    transition: background-color 0.2s ease, transform 0.2s ease;
     box-shadow: 
         inset 0 1px 0 rgba(255,255,255,0.5),
         0 2px 4px rgba(0,0,0,0.2);
@@ -1554,29 +1579,6 @@ body {
     transform: translateY(-1px) !important;
 }
 
-@keyframes vintage-highlight {
-    0% { 
-        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
-        box-shadow: 
-            0 4px 8px rgba(139, 69, 19, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            0 0 0 1px rgba(212, 175, 55, 0.3);
-    }
-    50% { 
-        background: linear-gradient(135deg, #f0ead6 0%, #e0d4b7 50%, #f0ead6 100%);
-        box-shadow: 
-            0 6px 12px rgba(139, 69, 19, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            0 0 0 1px rgba(212, 175, 55, 0.5);
-    }
-    100% { 
-        background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc6 50%, #f5f1e8 100%);
-        box-shadow: 
-            0 4px 8px rgba(139, 69, 19, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            0 0 0 1px rgba(212, 175, 55, 0.3);
-    }
-}
 
 /* 🎯 AVATARS VINTAGE STYLE */
 .avatar {
@@ -1602,25 +1604,13 @@ body {
     filter: sepia(0.2) contrast(1.1) brightness(1.05) !important;
 }
 
-@keyframes vintage-avatar {
-    0% { 
-        transform: scale(1);
-        box-shadow: 
-            0 0 0 3px rgba(212, 175, 55, 0.2),
-            0 2px 4px rgba(139, 69, 19, 0.3);
-    }
-    50% { 
-        transform: scale(1.05);
-        box-shadow: 
-            0 0 0 4px rgba(212, 175, 55, 0.3),
-            0 4px 8px rgba(139, 69, 19, 0.4);
-    }
-    100% { 
-        transform: scale(1);
-        box-shadow: 
-            0 0 0 3px rgba(212, 175, 55, 0.2),
-            0 2px 4px rgba(139, 69, 19, 0.3);
-    }
+.activity-item:hover,
+.leaderboard-item:hover,
+.invitation-item:hover {
+    background: #f0f0f0 !important;
+    border: 1px solid #d4af37 !important;
+    transform: translateY(-1px) !important;
+    /* Plus d'animation infinie */
 }
 
 /* 🎯 TEXTE VINTAGE STYLE AU HOVER */
@@ -1845,5 +1835,40 @@ body {
     .ranking-tooltip {
         right: -50px;
         min-width: 250px;
+    }
+}
+
+/* ========== CORRECTION ALIGNEMENT RANKING SYSTEM MOBILE ========== */
+@media (max-width: 768px) {
+    .date-ranking-container {
+        align-items: center !important; /* Centre au lieu de flex-end */
+        min-width: auto !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    .ranking-system-container {
+        align-self: center !important; /* Centre le conteneur */
+    }
+    
+    .ranking-system-text {
+        justify-content: center !important; /* Centre le texte */
+        white-space: normal !important; /* Permet retour à la ligne si nécessaire */
+    }
+    
+    .date {
+        justify-content: center !important; /* Centre aussi la date */
+        text-align: center !important;
+    }
+    
+    /* Ajuste le tooltip pour mobile */
+    .ranking-tooltip {
+        right: 50% !important;
+        transform: translateX(50%) translateY(-10px) !important;
+        min-width: 250px !important;
+    }
+    
+    .ranking-system-container:hover .ranking-tooltip {
+        transform: translateX(50%) translateY(0) !important;
     }
 }
