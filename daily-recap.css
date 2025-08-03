@@ -1,13 +1,13 @@
-/* Reset et base */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ========== PROTECTION ANTI-CRASH MOBILE ========== */
+
 @media (max-width: 768px) {
-    /* Désactive TOUTES les animations sur mobile */
+    
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
@@ -15,14 +15,14 @@
         animation-delay: 0s !important;
     }
     
-    /* Force l'arrêt des animations infinies */
+    
     .skeleton-item, .skeleton-avatar, .skeleton-line,
     .loading, .updated, .recap-container,
     .activity-item, .leaderboard-item, .invitation-item {
         animation: none !important;
     }
     
-    /* Transitions mobiles ultra-rapides */
+    
     .leaderboard-button, .missing-ids-button,
     .activity-item, .leaderboard-item {
         transition: background-color 0.1s ease !important;
@@ -46,7 +46,7 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Header layout */
+
 .header-content {
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@ body {
     justify-content: center;
 }
 
-/* Bouton style journal vintage */
+
 .leaderboard-button {
     display: inline-flex;
     align-items: center;
@@ -89,7 +89,7 @@ body {
     overflow: hidden;
 }
 
-/* Effet journal ancien */
+
 .leaderboard-button::before {
     content: '';
     position: absolute;
@@ -128,12 +128,12 @@ body {
     filter: sepia(1) hue-rotate(20deg);
 }
 
-/* Style vintage pour l'icône */
+
 .leaderboard-button:hover .button-icon {
     filter: sepia(0) brightness(1.2);
 }
 
-/* Date section styling */
+
 .date-section {
     display: flex;
     align-items: center;
@@ -196,7 +196,7 @@ body {
     color: #8b4513;
 }
 
-/* Grid layout */
+
 .recap-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -712,7 +712,7 @@ body {
 .header-logo:hover {
     transform: scale(1.1);
 }
-/* Ajout au daily-recap.css */
+
 .skeleton-item {
     animation: skeleton-loading 1.5s ease-in-out infinite alternate;
     pointer-events: none;
@@ -773,7 +773,7 @@ body {
     animation: updateGlow 1s ease-in-out;
 }
 
-/* Loading subtle */
+
 .loading {
     opacity: 0.6;
     animation: pulse 1.5s infinite;
@@ -845,7 +845,7 @@ body {
     }
 }
 
-/* Animation d'entrée subtile */
+
 .recap-container {
     animation: gentleFlip 0.6s ease-out;
 }
@@ -861,7 +861,7 @@ body {
     }
 }
 
-/* Effet bouton */
+
 .leaderboard-button {
     transition: all 0.2s ease;
     position: relative;
@@ -892,16 +892,16 @@ body {
     transform: scale(0.95);
 }
 
-/* ========== CORRECTION LOGO MOBILE ========== */
+
 @media (max-width: 768px) {
     .header-logo {
-        height: 30px; /* Plus petit sur mobile */
-        transform: translateY(-8px); /* Moins décalé vers le haut */
+        height: 30px; 
+        transform: translateY(-8px); 
     }
     
     .title-container h1 {
-        font-size: 1.4em; /* Titre plus petit sur mobile */
-        align-items: flex-start; /* Alignement en haut */
+        font-size: 1.4em; 
+        align-items: flex-start; 
     }
     
     .logo-container {
@@ -910,14 +910,14 @@ body {
         gap: 10px;
     }
     
-    /* Alternative si le logo pose encore problème */
+    
     .header-logo {
         height: 25px;
         transform: translateY(-4px);
         margin-left: 0;
     }
 }
-/* ========== BOUTONS DANS LE HEADER ========== */
+
 .right-section {
     display: flex;
     gap: 10px;
@@ -925,7 +925,7 @@ body {
     align-items: center;
 }
 
-/* ========== CORRECTION EFFET VERT POUR MISSING IDS BUTTON ========== */
+
 .missing-ids-button {
     display: inline-flex;
     align-items: center;
@@ -946,12 +946,12 @@ body {
         inset 0 1px 0 rgba(255,255,255,0.5),
         0 2px 4px rgba(0,0,0,0.2);
     position: relative;
-    overflow: hidden; /* IMPORTANT pour l'effet de glissement */
+    overflow: hidden; 
     height: auto;
-    text-decoration: none; /* Au cas où c'est un lien */
+    text-decoration: none;
 }
 
-/* Effet journal ancien - PREMIER pseudo-élément */
+
 .missing-ids-button::before {
     content: '';
     position: absolute;
@@ -970,7 +970,7 @@ body {
     z-index: 1;
 }
 
-/* EFFET VERT GLISSANT - DEUXIÈME pseudo-élément */
+
 .missing-ids-button::after {
     content: '';
     position: absolute;
@@ -985,49 +985,49 @@ body {
     z-index: 2;
 }
 
-/* Déclencher l'effet au hover */
+
 .missing-ids-button:hover::after {
     transform: translateX(100%);
 }
 
-/* Effet hover principal */
+
 .missing-ids-button:hover {
     background: #8B4513;
     color: #f5f5dc;
-    transform: translateY(-2px); /* MÊME effet que leaderboard */
-    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3); /* MÊME ombre verte */
+    transform: translateY(-2px); 
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3); 
 }
 
-/* Effet active */
+
 .missing-ids-button:active {
-    transform: scale(0.95); /* MÊME effet que leaderboard */
+    transform: scale(0.95); 
 }
 
-/* Style de l'icône */
+
 .missing-ids-button .button-icon {
     font-size: 16px;
     filter: sepia(1) hue-rotate(20deg);
     position: relative;
-    z-index: 3; /* Au-dessus de tous les effets */
+    z-index: 3; 
 }
 
 .missing-ids-button:hover .button-icon {
     filter: sepia(0) brightness(1.2);
 }
 
-/* Style du texte */
+
 .missing-ids-button span {
     position: relative;
-    z-index: 3; /* Au-dessus de tous les effets */
+    z-index: 3; 
 }
 
 
-/* S'assurer que le texte reste au-dessus de l'effet */
+
 .missing-ids-button span {
     position: relative;
     z-index: 2;
 }
-/* ========== MODAL MISSING IDS SIMPLIFIÉE ========== */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1120,7 +1120,7 @@ body {
     overflow-y: auto;
 }
 
-/* ========== TABLEAU SIMPLIFIÉ POUR MISSING IDS ========== */
+
 .simple-missing-table {
     width: 100%;
     border-collapse: collapse;
@@ -1188,7 +1188,7 @@ body {
     font-size: 16px;
 }
 
-/* Style pour les avatars par défaut */
+
 .simple-user-avatar::before {
     content: attr(alt);
     display: block;
@@ -1219,7 +1219,7 @@ body {
     width: 80px;
 }
 
-/* ========== CORRECTION BOUTON X PROFILE ========== */
+
 .simple-x-profile-link {
     background: #f5f5dc;
     border: 2px solid #1DA1F2;
@@ -1274,7 +1274,7 @@ body {
     color: #856404;
 }
 
-/* Loading et Error states */
+
 .loading {
     text-align: center;
     padding: 40px;
@@ -1300,7 +1300,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* ========== RESPONSIVE ========== */
+
 @media (max-width: 768px) {
     .right-section {
         flex-direction: column;
@@ -1332,7 +1332,7 @@ body {
         font-size: 1.2em;
     }
 }
-/* ========== RESPONSIVE MOBILE POUR MISSING IDS ========== */
+
 @media (max-width: 768px) {
     .recap-header {
         flex-direction: column;
@@ -1361,7 +1361,7 @@ body {
         gap: 10px;
     }
     
-    /* Bouton Missing IDs mobile - même taille que Gigachad Leaderboard */
+    
     .missing-ids-button {
         width: 100%;
         max-width: 300px;
@@ -1375,7 +1375,7 @@ body {
         gap: 8px;
     }
     
-    /* Bouton Gigachad Leaderboard mobile pour comparaison */
+    
     .leaderboard-button {
         width: 100%;
         max-width: 300px;
@@ -1389,20 +1389,20 @@ body {
         gap: 8px;
     }
     
-    /* Date mobile */
+   
     .date {
         font-size: 12px;
         padding: 8px 16px;
         margin-top: 5px;
     }
     
-    /* Icônes boutons mobile */
+  
     .missing-ids-button .button-icon,
     .leaderboard-button .button-icon {
         font-size: 16px;
     }
     
-    /* Texte boutons mobile */
+    
     .missing-ids-button span,
     .leaderboard-button span {
         font-size: 14px;
@@ -1411,7 +1411,7 @@ body {
     }
 }
 
-/* ========== RESPONSIVE TRÈS PETIT ÉCRAN ========== */
+
 @media (max-width: 480px) {
     .missing-ids-button,
     .leaderboard-button {
@@ -1437,7 +1437,7 @@ body {
     }
 }
 
-/* ========== RESPONSIVE TABLETTE ========== */
+
 @media (max-width: 1024px) and (min-width: 769px) {
     .recap-header {
         padding: 20px;
@@ -1456,7 +1456,7 @@ body {
     }
 }
 
-/* 🎯 Animation RETRO WAVE - VERSION UNIFORMISÉE */
+
 .dashboard-card {
     transition: all 0.3s ease;
     position: relative;
@@ -1476,7 +1476,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* 🎯 UNIFORMISATION DE TOUTES LES LIGNES */
+
 .activity-item, 
 .leaderboard-item, 
 .gigachad-item,
@@ -1502,7 +1502,7 @@ body {
 }
 
 
-/* 🎯 CORRECTION SPÉCIFIQUE POUR RECENT VOUCHES */
+
 .section[data-section="vouches"] .activity-item,
 .section:has([data-section="vouches"]) .activity-item,
 .activity-item:has(.eth-amount) {
@@ -1514,18 +1514,18 @@ body {
     padding: 12px !important;
 }
 
-/* 🎯 Style pour les montants ETH dans les vouches (violet foncé + bold + alignement) */
+
 .vouch-amount {
     font-size: 12px !important;
-    color: #4A90E2 !important;  /* Violet plus prononcé */
+    color: #4A90E2 !important;  
     font-weight: bold !important;
     text-align: right !important;
-   padding-right: 0 !important;  /* Décalage à droite pour aligner avec l'horodatage */
+   padding-right: 0 !important;  
 }
 
 
 
-/* 🎯 RÉORGANISATION DU CONTENU VOUCHES */
+
 .activity-item .vouch-content {
     display: flex !important;
     align-items: center !important;
@@ -1558,7 +1558,7 @@ body {
 
 
 
-/* 🎯 ANIMATION VINTAGE JOURNAL - Plus en accord avec le style */
+
 .activity-item:hover,
 .leaderboard-item:hover,
 .gigachad-item:hover,
@@ -1580,7 +1580,7 @@ body {
 }
 
 
-/* 🎯 AVATARS VINTAGE STYLE */
+
 .avatar {
     transition: all 0.3s ease;
     width: 40px !important;
@@ -1610,10 +1610,10 @@ body {
     background: #f0f0f0 !important;
     border: 1px solid #d4af37 !important;
     transform: translateY(-1px) !important;
-    /* Plus d'animation infinie */
+   
 }
 
-/* 🎯 TEXTE VINTAGE STYLE AU HOVER */
+
 .activity-item:hover .username,
 .leaderboard-item:hover .username,
 .gigachad-item:hover .username,
@@ -1631,7 +1631,7 @@ body {
     text-shadow: 0.5px 0.5px 1px rgba(212, 175, 55, 0.2) !important;
 }
 
-/* 🎯 TEXTE UNIFORME */
+
 .activity-item .username,
 .leaderboard-item .username,
 .gigachad-item .username,
@@ -1649,7 +1649,7 @@ body {
     color: #666 !important;
 }
 
-/* ========== RANKING SYSTEM (DAILY RECAP) ========== */
+
 .date-ranking-container {
     display: flex;
     flex-direction: column;
@@ -1800,7 +1800,7 @@ body {
     font-size: 0.8em;
 }
 
-/* Flèche du tooltip */
+
 .ranking-tooltip::before {
     content: '';
     position: absolute;
@@ -1825,7 +1825,7 @@ body {
     border-bottom: 6px solid #ffffff;
 }
 
-/* ========== RESPONSIVE ========== */
+
 @media (max-width: 768px) {
     .date-ranking-container {
         align-items: center;
@@ -1838,30 +1838,30 @@ body {
     }
 }
 
-/* ========== CORRECTION ALIGNEMENT RANKING SYSTEM MOBILE ========== */
+
 @media (max-width: 768px) {
     .date-ranking-container {
-        align-items: center !important; /* Centre au lieu de flex-end */
+        align-items: center !important; 
         min-width: auto !important;
         width: 100% !important;
         text-align: center !important;
     }
     
     .ranking-system-container {
-        align-self: center !important; /* Centre le conteneur */
+        align-self: center !important; 
     }
     
     .ranking-system-text {
-        justify-content: center !important; /* Centre le texte */
-        white-space: normal !important; /* Permet retour à la ligne si nécessaire */
+        justify-content: center !important; 
+        white-space: normal !important; 
     }
     
     .date {
-        justify-content: center !important; /* Centre aussi la date */
+        justify-content: center !important;
         text-align: center !important;
     }
     
-    /* Ajuste le tooltip pour mobile */
+   
     .ranking-tooltip {
         right: 50% !important;
         transform: translateX(50%) translateY(-10px) !important;
