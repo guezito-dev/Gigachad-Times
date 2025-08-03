@@ -106,4 +106,4 @@ Higher activity leads to higher ranks.
 - Mobile Optimizations: Reduced animations on mobile for performance.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - See [LICENSE](LICENSE) for details.
