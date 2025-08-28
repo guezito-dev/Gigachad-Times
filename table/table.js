@@ -6,6 +6,22 @@ let currentSort = {
     direction: 'desc' 
 };
 
+function updateCurrentDate() {
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'numeric', 
+            day: 'numeric' 
+        };
+        dateElement.textContent = now.toLocaleDateString('en-GB', options);
+        debug('✅ Date updated successfully');
+    } else {
+        debug('⚠️ #current-date element not found');
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('https://raw.githubusercontent.com/guezito-dev/ethos/main/gigachads-ranking.json')
@@ -25,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.error('Erreur lors du chargement des données:', error);
         });
+        updateCurrentDate();
 });
 
 
@@ -461,4 +478,5 @@ function removeHighlight() {
 
 
 window.selectUser = selectUser;
+
 
