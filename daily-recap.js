@@ -67,7 +67,7 @@ function updateCurrentDate() {
             month: 'numeric', 
             day: 'numeric' 
         };
-        dateElement.textContent = now.toLocaleDateString('en-UK', options);
+        dateElement.textContent = now.toLocaleDateString('en-GB', options);
         debug('✅ Date updated successfully');
     } else {
         debug('⚠️ #current-date element not found');
@@ -1071,4 +1071,5 @@ function refreshData() {
     debug('🔄 Refreshing data...');
     new DailyRecapManager();
 }
+
 
